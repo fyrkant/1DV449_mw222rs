@@ -1,0 +1,17 @@
+[
+  {
+    "href": [
+      "http://localhost/calendar"
+    ]
+  },
+  {
+    "href": [
+      "http://localhost/cinema"
+    ]
+  },
+  {
+    "href": [
+      "http://localhost/dinner"
+    ]
+  }
+]

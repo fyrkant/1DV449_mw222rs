@@ -7,10 +7,6 @@
   <body>
     <h1>{{ title }}</h1>
     <p>Welcome to {{ title }}</p>
-    <form action="/" method="post">
-    	<label for="url">Skriv in adress:</label>
-    	<input name="url" id="url" type="text" ></input>
-		<input type="submit" value="Skrapa" />
-    </form>
+    <p>Skrapade: {{ url }}</p>
   </body>
 </html>
