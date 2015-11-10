@@ -22,7 +22,9 @@ function *scrape() {
 
 	console.log(post.url);
 
-	var html = yield scraper(post.url);
+	var data = yield scraper(post.url);
+
+	await console.log(data);
 
 	this.redirect('/');
 }
