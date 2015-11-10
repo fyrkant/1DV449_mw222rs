@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var x = require('x-ray')();
-var _ = require('lodash');
+var scraper = require('../scraper/scraper');
+
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -17,12 +17,10 @@ router.post('/', function(req, res) {
 
 	console.log(url);
 
-	x(url, {
-		title: 'li',
-		name: x('a@href', 'li a')
-	})(function(err, obj) {
-		console.log(obj);
-	});
+	var test = scraper(url);
+
+	console.log(test.next());
+	console.log(test.next());
 
 });
 
