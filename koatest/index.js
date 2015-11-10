@@ -30,16 +30,22 @@ function *scrape() {
 			return cheerio.load(body);
 		}
 	};
-	var data = {};
+	var data = {
+		mainPage: '', 
+		persons: ''
+	};
 
 	yield rp(options)
 		.then(function ($) {
-			$('a').each(function(){
-				data[$('a').index(this)] = options.uri+$(this).attr('href');
+			var mainPageLinks = {};
+			$('a').each(function(){				
+				mainPageLinks[$('a').index(this)] = options.uri+$(this).attr('href');
+				
 			});
+			data['mainPage'] = mainPageLinks;
 		})
 		.then(function(){
-			console.log('log1',data);
+			console.log('log1', data);
 
 		})
 		.catch(function (err) {
@@ -47,7 +53,7 @@ function *scrape() {
 		})
 
 	var calendarOptions = {
-		uri: data[0],
+		uri: data.mainPage[0],
 		transform: function (body) {
 			return cheerio.load(body);
 		}
@@ -55,7 +61,17 @@ function *scrape() {
 
 	yield rp(calendarOptions)
 		.then(function($) {
-			console.log($.html());
+			var personLinks = {};
+			$('a').each(function(){
+				personLinks[$('a').index(this)] = data.mainPage[0] + '/' + $(this).attr('href');
+			});
+			data['persons'] = personLinks;
+		})
+		.then(function() {
+			console.log('log2', data);
+		})
+		.then(function() {
+			
 		})
 
 	var data = yield scraper(post.url);
