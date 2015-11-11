@@ -1,30 +1,41 @@
 var rp = require('request-promise');
 var cheerio = require('cheerio');
 
-var calendarScraper = function*(url){
-	var firstPageLinks = [];
+var calendarScraper = function(links){
 
-	var data = yield rp(url)
-		.then(
-			function(htmlString) {
-				var $ = cheerio.load(htmlString);
-				return $('a').each(
-					function(i, el) {
-						firstPageLinks.push($(el).attr('href'));
+	var freeDays = {};
+	var theDayToMeet = '';
+
+	_.forEach(links.persons, function(personLink) {
+		var personOptions = {
+			uri: personLink,
+			transform: function (body) {
+				return cheerio.load(body);
+			}
+		};
+		rp(personOptions)
+			.then(function($){
+				var name = $('h2.center').text();
+				var days = [];
+				var foundFreeDays = [];
+
+				$('th').each(function(){
+					var day = $(this).text();
+					days.push(day);
+				});
+				$('td').each(function () {
+					var text = $(this).text();
+					var index = $('td').index(this);
+					if (text.toLowerCase() === 'ok') {
+						foundFreeDays.push(days[index]);
 					}
-				);
-			})
-		.then(function(){
-			firstPageLinks.forEach(function(el) {
-				var test;
-			})
-		})		
-		.catch(
-			function(err){
-				console.log(err);
-			});
+				});
+				freeDays[name] = foundFreeDays;
+				console.log(foundFreeDays);
+			})			
+	});
 
-	return data;
+	
 }
 
 module.exports = calendarScraper;

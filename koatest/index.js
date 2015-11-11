@@ -69,54 +69,40 @@ function *scrape() {
 				personLinks[$('a').index(this)] = links.mainPage[0] + '/' + $(this).attr('href');
 			});
 			links['persons'] = personLinks;
-		});
-	
-	_.forEach(links.persons, function(el) {
+		})
+		
+
+		
+	_.forEach(links.persons, function(personLink) {
 		var personOptions = {
-			uri: el,
+			uri: personLink,
 			transform: function (body) {
 				return cheerio.load(body);
 			}
 		};
 		rp(personOptions)
 			.then(function($){
-
 				var name = $('h2.center').text();
-
 				var days = [];
-				var oks = [];
-
-				var foundFreeDays = {};
+				var foundFreeDays = [];
 
 				$('th').each(function(){
 					var day = $(this).text();
 					days.push(day);
 				});
-
 				$('td').each(function () {
 					var text = $(this).text();
 					var index = $('td').index(this);
 					if (text.toLowerCase() === 'ok') {
-						foundFreeDays[days[index]] = 1;
+						foundFreeDays.push(days[index]);
 					}
 				});
-
 				freeDays[name] = foundFreeDays;
-
-				
-				//freeDays[name] = Object.assign(freeDays[name] || {}, toAdd);
-			})
-			.then(function () {
-				console.log('all links:', links);
-				console.log('free days:', freeDays);
-				
-			})
-			.
-
-
+				console.log(foundFreeDays);
+			})			
 	});
-
-	var data = yield scraper(post.url);
+	
+	console.log('logging free days: ', freeDays);
 
 	this.redirect('/', {title: post.url});
 }
