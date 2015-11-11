@@ -30,10 +30,13 @@ function *scrape() {
 			return cheerio.load(body);
 		}
 	};
-	var data = {
+	var links = {
 		mainPage: '', 
 		persons: ''
 	};
+
+	var freeDays = {};
+	var theDayToMeet = '';
 
 	yield rp(options)
 		.then(function ($) {
@@ -42,10 +45,10 @@ function *scrape() {
 				mainPageLinks[$('a').index(this)] = options.uri+$(this).attr('href');
 				
 			});
-			data['mainPage'] = mainPageLinks;
+			links['mainPage'] = mainPageLinks;
 		})
 		.then(function(){
-			console.log('log1', data);
+			console.log('log1', links);
 
 		})
 		.catch(function (err) {
@@ -53,7 +56,7 @@ function *scrape() {
 		})
 
 	var calendarOptions = {
-		uri: data.mainPage[0],
+		uri: links.mainPage[0],
 		transform: function (body) {
 			return cheerio.load(body);
 		}
@@ -63,16 +66,55 @@ function *scrape() {
 		.then(function($) {
 			var personLinks = {};
 			$('a').each(function(){
-				personLinks[$('a').index(this)] = data.mainPage[0] + '/' + $(this).attr('href');
+				personLinks[$('a').index(this)] = links.mainPage[0] + '/' + $(this).attr('href');
 			});
-			data['persons'] = personLinks;
-		})
-		.then(function() {
-			console.log('log2', data);
-		})
-		.then(function() {
-			
-		})
+			links['persons'] = personLinks;
+		});
+	
+	_.forEach(links.persons, function(el) {
+		var personOptions = {
+			uri: el,
+			transform: function (body) {
+				return cheerio.load(body);
+			}
+		};
+		rp(personOptions)
+			.then(function($){
+
+				var name = $('h2.center').text();
+
+				var days = [];
+				var oks = [];
+
+				var foundFreeDays = {};
+
+				$('th').each(function(){
+					var day = $(this).text();
+					days.push(day);
+				});
+
+				$('td').each(function () {
+					var text = $(this).text();
+					var index = $('td').index(this);
+					if (text.toLowerCase() === 'ok') {
+						foundFreeDays[days[index]] = 1;
+					}
+				});
+
+				freeDays[name] = foundFreeDays;
+
+				
+				//freeDays[name] = Object.assign(freeDays[name] || {}, toAdd);
+			})
+			.then(function () {
+				console.log('all links:', links);
+				console.log('free days:', freeDays);
+				
+			})
+			.
+
+
+	});
 
 	var data = yield scraper(post.url);
 
