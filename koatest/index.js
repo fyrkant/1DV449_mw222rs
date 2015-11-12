@@ -7,7 +7,7 @@ var rp = require('request-promise');
 var cheerio = require('cheerio');
 var _ = require('lodash');
 var app = koa();
-var scraper = require('./scraper/scraper');
+var calendarScraper = require('./scraper/calendarScraper');
 
 
 app.use(logger());
@@ -69,38 +69,18 @@ function *scrape() {
 				personLinks[$('a').index(this)] = links.mainPage[0] + '/' + $(this).attr('href');
 			});
 			links['persons'] = personLinks;
+			return personLinks
+		})
+		.then((links) =>{
+			freeDays = _.map(links, calendarScraper);
+		})
+		.then(() => {
+			console.log(freeDays);
 		})
 		
 
 		
-	_.forEach(links.persons, function(personLink) {
-		var personOptions = {
-			uri: personLink,
-			transform: function (body) {
-				return cheerio.load(body);
-			}
-		};
-		rp(personOptions)
-			.then(function($){
-				var name = $('h2.center').text();
-				var days = [];
-				var foundFreeDays = [];
-
-				$('th').each(function(){
-					var day = $(this).text();
-					days.push(day);
-				});
-				$('td').each(function () {
-					var text = $(this).text();
-					var index = $('td').index(this);
-					if (text.toLowerCase() === 'ok') {
-						foundFreeDays.push(days[index]);
-					}
-				});
-				freeDays[name] = foundFreeDays;
-				console.log(foundFreeDays);
-			})			
-	});
+	//freeDays = _.map(links.persons, calendarScraper(link));
 	
 	console.log('logging free days: ', freeDays);
 
