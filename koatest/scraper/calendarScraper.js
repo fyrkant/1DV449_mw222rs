@@ -1,8 +1,4 @@
-var rp = require('request-promise');
-var cheerio = require('cheerio');
-
 var calendarScraper = function($) {
-    var name = $('h2.center').text();
     var days = [];
     var foundFreeDays = [];
 

@@ -88,7 +88,9 @@ function *scrape() {
     freeDays = yield Promise.all(freeDays).
         then((values) => {return values;});
 
-    console.log(freeDays);
+    var dayToMeet = freeDays.reduce((one, two) => _.intersection(one,two));
+
+    console.log(dayToMeet);
     //freeDays.forEach((prom) => prom.then(link => console.log(link)));
 
     this.redirect('/', {title: post.url});
