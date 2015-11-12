@@ -1,17 +1,20 @@
 var render = require('./lib/render');
 var logger = require('koa-logger');
+var validate = require('koa-validate');
+var body = require('koa-body');
 var route = require('koa-route');
 var parse = require('co-body');
 var koa = require('koa');
 var rp = require('request-promise');
 var cheerio = require('cheerio');
 var _ = require('lodash');
-var async = require('async');
 var app = koa();
+
 var calendarScraper = require('./scraper/calendarScraper');
 
 
 app.use(logger());
+app.use(validate());
 
 app.use(route.get('/', index));
 app.use(route.post('/', scrape));
@@ -22,6 +25,10 @@ function *index() {
 
 function *scrape() {
     var post = yield parse(this);
+    var prefix = 'http://';
+
+    post.url = post.url.substr(0, prefix.length) !== prefix ?
+        prefix + post.url : post.url;
 
     console.log(post.url);
 
@@ -39,6 +46,7 @@ function *scrape() {
     var freeDays = {};
     var calendarLinks = [];
 
+    // Get the different links from the main page
     yield rp(options).
         then(function($) {
             var mainPageLinks = {};
@@ -49,21 +57,31 @@ function *scrape() {
             });
             links['mainPage'] = mainPageLinks;
         }).
-        then(function() {
-            console.log('log1', links);
-
-        }).
         catch(function(err) {
             console.log(err);
         });
 
+    // Find which link is to where
+    var calendarLink = _.find(links.mainPage,
+        link => link.includes('calendar'));
+    var restaurantLink = _.find(links.mainPage,
+        link => link.includes('dinner'));
+    var cinemaLink = _.find(links.mainPage,
+        link => link.includes('cinema'));
+
+    console.log(calendarLink);
+    console.log(restaurantLink);
+    console.log(cinemaLink);
+
+
     var calendarOptions = {
-        uri: links.mainPage[0],
+        uri: calendarLink,
         transform: function(body) {
             return cheerio.load(body);
         }
     };
 
+    // Find the links to the three friends calendars
     yield rp(calendarOptions).
         then(function($) {
             var personLinks = [];
@@ -77,25 +95,36 @@ function *scrape() {
             return personLinks;
         });
 
+    // Find which days the friends are free
     freeDays = calendarLinks.map((link) =>
         rp(link).
         then(function(html) {
             return calendarScraper(cheerio.load(html));
         }));
-
-    //freeDays = _.map(links.persons, calendarScraper(link));
-
     freeDays = yield Promise.all(freeDays).
         then((values) => {return values;});
 
+    // Find which day all three friends have free.
     var dayToMeet = freeDays.reduce((one, two) => _.intersection(one,two));
 
-    console.log(dayToMeet);
+
+    // Translating day for the cinema scrape.
+    var dayTranslater = {
+        'Friday': 'Fredag',
+        'Saturday': 'Lördag',
+        'Sunday': 'Söndag'
+    };
+
+    // Get option values for day from day select, line 31
+
+    // Get option values for movies and movie names from movie select, line 52
+
+
+
+
     //freeDays.forEach((prom) => prom.then(link => console.log(link)));
 
     this.redirect('/', {title: post.url});
 }
-
-
 
 app.listen(3000);
