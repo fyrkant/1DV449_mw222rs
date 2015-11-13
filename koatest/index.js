@@ -63,14 +63,17 @@ function *scrape() {
 
     // Find which link is to where
     var calendarLink = _.find(links.mainPage,
-        link => link.includes('calendar'));
-    var restaurantLink = _.find(links.mainPage,
-        link => link.includes('dinner'));
+        link => link.includes('calendar')
+    );
+    var dinnerLink = _.find(links.mainPage,
+        link => link.includes('dinner')
+    );
     var cinemaLink = _.find(links.mainPage,
-        link => link.includes('cinema'));
+        link => link.includes('cinema')
+    );
 
     console.log(calendarLink);
-    console.log(restaurantLink);
+    console.log(dinnerLink);
     console.log(cinemaLink);
 
 
@@ -114,6 +117,42 @@ function *scrape() {
         'Saturday': 'Lördag',
         'Sunday': 'Söndag'
     };
+
+    var cinemaOptions = {
+        uri: cinemaLink,
+        transform: function(body) {
+            return cheerio.load(body);
+        }
+    };
+
+    var valueOfDayToMeet;
+    var movieOptionValues = [];
+
+    yield rp(cinemaOptions).
+        then(function($) {
+            var query = 'option:contains(' +
+                                dayTranslater[dayToMeet] + ')';
+
+            valueOfDayToMeet = $('select#day').find(query).attr('value');
+
+            $('select#movie').find('option:enabled').
+                each(function() {
+                    movieOptionValues.push($(this).attr('value'));
+                });
+
+            console.log(valueOfDayToMeet);
+            console.log(movieOptionValues);
+
+        });
+
+    var movieData = movieOptionValues.map((value) => {
+        var connectString = cinemaLink +
+            `/check?day=${valueOfDayToMeet}&movie=${value}`;
+
+        return rp(connectString);
+    });
+
+    yield Promise.all(movieData).then(values => console.log(values));
 
     // Get option values for day from day select, line 31
 
