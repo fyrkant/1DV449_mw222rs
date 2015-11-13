@@ -127,6 +127,7 @@ function *scrape() {
 
     var valueOfDayToMeet;
     var movieOptionValues = [];
+    var movieNames = [];
 
     yield rp(cinemaOptions).
         then(function($) {
@@ -138,10 +139,11 @@ function *scrape() {
             $('select#movie').find('option:enabled').
                 each(function() {
                     movieOptionValues.push($(this).attr('value'));
+                    movieNames.push($(this).text());
                 });
 
-            console.log(valueOfDayToMeet);
-            console.log(movieOptionValues);
+            // console.log(valueOfDayToMeet);
+            // console.log(movieOptionValues);
 
         });
 
@@ -152,7 +154,19 @@ function *scrape() {
         return rp(connectString);
     });
 
-    yield Promise.all(movieData).then(values => console.log(values));
+    movieData = yield Promise.all(movieData).then(values => {
+        var namedMovies = values.map((element, index) => {
+            element = JSON.parse(element);
+            _.map(element, (el) => {
+                el.movie = movieNames[index];
+            });
+            return element;
+        });
+
+        return namedMovies;
+    });
+
+    console.log(movieData);
 
     // Get option values for day from day select, line 31
 
