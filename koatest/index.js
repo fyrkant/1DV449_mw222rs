@@ -1,7 +1,6 @@
 var render = require('./lib/render');
 var logger = require('koa-logger');
 var validate = require('koa-validate');
-var body = require('koa-body');
 var route = require('koa-route');
 var parse = require('co-body');
 var koa = require('koa');
@@ -141,10 +140,6 @@ function *scrape() {
                     movieOptionValues.push($(this).attr('value'));
                     movieNames.push($(this).text());
                 });
-
-            // console.log(valueOfDayToMeet);
-            // console.log(movieOptionValues);
-
         });
 
     var movieData = movieOptionValues.map((value) => {
@@ -166,16 +161,33 @@ function *scrape() {
         return namedMovies;
     });
 
-    console.log(movieData);
+    var bookableMovies = _.remove(_.flatten(movieData),
+        m => {return m.status === 1;});
 
-    // Get option values for day from day select, line 31
+    console.log(bookableMovies);
 
-    // Get option values for movies and movie names from movie select, line 52
+    var dinnerOptions = {
+        uri: dinnerLink,
+        transform: function(body) {
+            return cheerio.load(body);
+        }
+    };
+    var dinnerData =  yield rp(dinnerOptions).
+        then(function($) {
+            var daySmallNoDots = dayTranslater[dayToMeet].
+                toLowerCase().replace(/ö/g, 'o').substr(0, 3);
+            var query = 'input[value^="' + daySmallNoDots + '"]';
+            var freeTime = [];
 
+            $(query).each(function() {
+                freeTime.push($(this).attr('value'));
+            });
 
+            return freeTime;
 
+        });
 
-    //freeDays.forEach((prom) => prom.then(link => console.log(link)));
+    console.log(dinnerData);
 
     this.redirect('/', {title: post.url});
 }
