@@ -189,7 +189,8 @@ function *scrape() {
 
     console.log(dinnerData);
 
-    this.redirect('/', {title: post.url});
+    //this.redirect('/', {title: post.url});
+    //this.body = yield render('index', {title: 'webbskraparn'});
 }
 
 app.listen(3000);
