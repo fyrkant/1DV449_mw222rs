@@ -1,16 +1,12 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>{{ title }}</title>
-    
-  </head>
-  <body>
+{% extends 'layout.html' %}
+
+{% block title %}Skrapan{% endblock %}
+
+{% block content %}
     <h1>{{ title }}</h1>
-    <p>Welcome to {{ title }}</p>
+    <p>Skriv in start-URL.</p>
     <form action="/" method="POST">
-    	<label for="url">Skriv in adress:</label>
-    	<input name="url" id="url" type="url" required ></input>
+    	<p><input name="url" id="url" type="url" required ></input></p>
 		<input type="submit" value="Skrapa" />
     </form>
-  </body>
-</html>
+{% endblock %}

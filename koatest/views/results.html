@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block title %}Skrapan{% endblock %}
+
+{% block content %}
+    <h1>{{ data.title }}</h1>
+    <p>Följande resultat skrapades fram:</p>
+    
+    <ul>
+    {% for result in data.results %}
+      <li>
+        <h2>{{ result.movie }}</h2>
+        <p>
+          Se {{ result.movie }} klockan {{ result.time }}. 
+          {% if result.dinnerTimes %}Boka sedan bord på Zekes: 
+            {% for dinner in  result.dinnerTimes %}
+              <a href="dinner.link">{{ dinner.time }}</a>{% if loop.last %}. {% else %}, {% endif %}
+            {% endfor %}
+          {% else %}
+            Det finns inga bord på Zekes efter denna visning.
+          {% endif %}
+        </p>
+      </li>
+    {% endfor %}    
+    </ul>
+{% endblock %}

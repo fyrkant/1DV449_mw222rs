@@ -16,6 +16,7 @@ app.use(logger());
 app.use(validate());
 
 app.use(route.get('/', index));
+app.use(route.get('/results', results));
 app.use(route.post('/', scrape));
 
 function *index() {
@@ -187,10 +188,52 @@ function *scrape() {
 
         });
 
+    var scrapedData = {title: 'Resultat'};
+
+    var results = bookableMovies.map((el) => {
+        var newObj = {};
+        var dinnerTimes = [];
+
+        dinnerData.forEach((data) => {
+            var dinnerTimeObj = {};
+            var startTime = data.substr(3,2);
+            var endTime = data.substr(5,2);
+            var movieEndTime = Number(el.time.substr(0,2)) + 2;
+
+            dinnerTimeObj.link = data;
+            dinnerTimeObj.time = `${startTime} - ${endTime}`;
+
+            if (movieEndTime <= startTime) {
+                dinnerTimes.push(dinnerTimeObj);
+            }
+            //console.log(el.time.substr(0,2));
+
+            //console.log(startTime);
+        });
+
+        console.log(dinnerTimes);
+
+        newObj.movie = el.movie;
+        newObj.time = el.time;
+
+        if (dinnerTimes.length !== 0) {
+            newObj.dinnerTimes = dinnerTimes;
+        }
+
+        return newObj;
+    });
+
+    scrapedData.results = results;
+
     console.log(dinnerData);
+    console.log(scrapedData);
 
     //this.redirect('/', {title: post.url});
-    //this.body = yield render('index', {title: 'webbskraparn'});
+    this.body = yield render('results', {data: scrapedData});
+}
+
+function *results() {
+    this.body = yield render('results', {title: 'webbskraparn'});
 }
 
 app.listen(3000);
