@@ -1,4 +1,5 @@
 {
+    "extends": "defaults/configurations/google",
     "rules": {
         "indent": [
             2,
@@ -16,12 +17,12 @@
             2,
             "always"
         ],
-        "no-unused-vars": 2
+        "no-unused-vars": 2,
+        "no-invalid-this": 0,
     },
     "env": {
         "es6": true,
         "node": true,
         "browser": true
     },
-    "extends": "defaults/configurations/google"
 }
