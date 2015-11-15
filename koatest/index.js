@@ -16,7 +16,7 @@ app.use(logger());
 app.use(validate());
 
 app.use(route.get('/', index));
-app.use(route.get('/results', results));
+app.use(route.get('/book/:id', book));
 app.use(route.post('/', scrape));
 
 function *index() {
@@ -232,8 +232,8 @@ function *scrape() {
     this.body = yield render('results', {data: scrapedData});
 }
 
-function *results() {
-    this.body = yield render('results', {title: 'webbskraparn'});
+function *book(id) {
+    console.log(id);
 }
 
 app.listen(3000);

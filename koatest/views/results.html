@@ -14,7 +14,7 @@
           Se {{ result.movie }} klockan {{ result.time }}. 
           {% if result.dinnerTimes %}Boka sedan bord på Zekes: 
             {% for dinner in  result.dinnerTimes %}
-              <a href="dinner.link">{{ dinner.time }}</a>{% if loop.last %}. {% else %}, {% endif %}
+              <a href="/book/{{dinner.link}}">{{ dinner.time }}</a>{% if loop.last %}. {% else %}, {% endif %}
             {% endfor %}
           {% else %}
             Det finns inga bord på Zekes efter denna visning.
