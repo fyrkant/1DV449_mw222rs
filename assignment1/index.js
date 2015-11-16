@@ -31,6 +31,7 @@ function *scrape() {
     // If the posted url doesn't have the http:// in front, add it.
     post.url = post.url.substr(0, prefix.length) !== prefix ?
         prefix + post.url : post.url;
+    post.url = post.url.replace(/\/+$/, '');
 
     this.session.url = post.url;
 
