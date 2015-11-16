@@ -1,7 +1,7 @@
 # 1DV449 Laborationsrepositorie
-## Ägare: Mattias Wikström, mw222rs
+#### Ägare: Mattias Wikström, mw222rs
 
-## Laboration 1, Webbskraparn 1.0
+#### Laboration 1, Webbskraparn 1.0
 
 ### Finns det några etiska aspekter vid webbskrapning. Kan du hitta något rättsfall?
 Etiskt har jag svårt att se några problem med webbskrapning, då man ju endast kommer åt sådan information som finns öppet publicerad på internet. De två problem som verkar ha [lyfts fram i rättsfall][1] verkar vara antingen dåliga skrapare som genom för energiskt skrapande överbelastat företags servrar och på så sätt lett till att detta företag tappat försäljning när sidan legat nere, eller varit naiva flygbolag eller liknande som inte tyckt om att analysföretag tagit reda på deras priser för jämförelse med konkurrenter. Exemplen med flygbolagen på Wikipedia-sidan verkar ju dock vara några år gamla (från 2007) och jag tror verkligen att många företags inställning till att dela med sig av all slags data genom publika APIer har förändrats avsevärt sedan dess. 
