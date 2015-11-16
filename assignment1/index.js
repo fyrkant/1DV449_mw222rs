@@ -17,7 +17,7 @@ app.use(route.get('/book/:id', book));
 app.use(route.post('/', scrape));
 
 function *index() {
-    this.body = yield render('index', {title: 'webbskraparn'});
+    this.body = yield render('index', {title: 'Webbskraparn 1.0'});
 }
 
 function *scrape() {
