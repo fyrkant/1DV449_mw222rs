@@ -6,21 +6,25 @@
     <h1>{{ data.title }}</h1>
     <p><strong>{{ data.day }}</strong> är dagen då alla vänner kan ses. Följande filmer visningar är bokningsbara:</p>
     
-    <ul>
+    
     {% for result in data.results %}
-      <li>
-        <h2>{{ result.movie }}</h2>
-        <p>
-          Se {{ result.movie }} klockan {{ result.time }}. 
-          {% if result.dinnerTimes %}Boka sedan bord på Zekes: 
-            {% for dinner in  result.dinnerTimes %}
-              <a href="/book/{{dinner.link}}">{{ dinner.time }}</a>{% if loop.last %}. {% else %}, {% endif %}
-            {% endfor %}
-          {% else %}
-            Det finns inga bord på Zekes efter denna visning.
-          {% endif %}
-        </p>
-      </li>
-    {% endfor %}    
-    </ul>
+      <h2>{{ result.name }}</h2>
+      <p>Kan ses på tiderna:</p>
+      <ul>
+        {% for time in result.times %}
+        <li>
+          <p>
+            {{ time.time }}. 
+            {% if time.dinnerTimes %}Boka sedan bord på Zekes: 
+              {% for dinner in  time.dinnerTimes %}
+                <a href="/book/{{dinner.link}}">{{ dinner.time }}</a>{% if loop.last %}. {% else %}, {% endif %}
+              {% endfor %}
+            {% else %}
+              Det finns inga bord på Zekes efter denna visning.
+            {% endif %}
+          </p>
+        </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}  
 {% endblock %}

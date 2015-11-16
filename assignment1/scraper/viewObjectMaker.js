@@ -2,7 +2,9 @@ var ViewObjectMaker = function(bookableMovies, dinnerData,
     dayToMeet, dayTranslater) {
     var scrapedData = {title: 'Resultat'};
 
-    var results = bookableMovies.map(el => {
+    var results = {};
+
+    bookableMovies.map(el => {
         var newObj = {};
         var dinnerTimes = [];
 
@@ -26,8 +28,10 @@ var ViewObjectMaker = function(bookableMovies, dinnerData,
         if (dinnerTimes.length !== 0) {
             newObj.dinnerTimes = dinnerTimes;
         }
-
-        return newObj;
+        results[el.id] = results[el.id] || {};
+        results[el.id].times = results[el.id].times || [];
+        results[el.id].name = el.movie;
+        results[el.id].times.push(newObj);
     });
 
     scrapedData.results = results;

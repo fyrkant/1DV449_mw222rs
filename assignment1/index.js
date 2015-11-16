@@ -4,13 +4,17 @@ var validate = require('koa-validate');
 var route = require('koa-route');
 var parse = require('co-body');
 var koa = require('koa');
+var rp = require('request-promise');
+var session = require('koa-session');
 var app = koa();
 
 var scraper = require('./scraper/scraper');
 
+app.keys = ['super secret stuff'];
 
 app.use(logger());
 app.use(validate());
+app.use(session(app));
 
 app.use(route.get('/', index));
 app.use(route.get('/book/:id', book));
@@ -28,14 +32,31 @@ function *scrape() {
     post.url = post.url.substr(0, prefix.length) !== prefix ?
         prefix + post.url : post.url;
 
+    this.session.url = post.url;
+
     var scrapedData = yield scraper(post.url);
 
-    //this.redirect('/', {title: post.url});
     this.body = yield render('results', {data: scrapedData});
 }
 
 function *book(id) {
-    console.log(id);
+    var url = `${this.session.url}/dinner/login`;
+    var username = 'zeke';
+    var password = 'coys';
+    var options = {
+        method: 'POST',
+        uri: url,
+        form: {
+            group1: id,
+            username: username,
+            password: password
+        }
+    };
+
+    var postRequest = yield rp(options).then(res => res).
+        catch(err => console.log(err));
+
+    this.body = postRequest;
 }
 
 app.listen(3000);

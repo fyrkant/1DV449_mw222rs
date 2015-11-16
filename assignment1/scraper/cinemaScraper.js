@@ -32,6 +32,7 @@ var cinemaScraper = function*(url, dayToMeet, dayTranslater) {
         var namedMovies = values.map((element, index) => {
             element = JSON.parse(element);
             _.map(element, (el) => {
+                el.id = el.movie;
                 el.movie = movieNames[index];
             });
             return element;
