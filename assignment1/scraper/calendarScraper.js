@@ -28,7 +28,11 @@ var calendarScraper = function*(url) {
     freeDays = yield Promise.all(freeDays).
         then(values => values);
 
-    return freeDays.reduce((one, two) => _.intersection(one,two));
+    var toReturn = freeDays.reduce((one, two) => _.intersection(one,two));
+
+    console.log(toReturn);
+
+    return toReturn;
 
 };
 

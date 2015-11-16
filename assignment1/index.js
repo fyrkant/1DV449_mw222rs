@@ -8,6 +8,7 @@ var session = require('koa-session');
 var app = koa();
 
 var scraper = require('./scraper/scraper');
+var freeDayFinder = require('./scraper/freeDayFinder');
 
 app.keys = ['super secret stuff'];
 
@@ -15,6 +16,7 @@ app.use(logger());
 app.use(session(app));
 
 app.use(route.get('/', index));
+app.use(route.get('/day/:id', day));
 app.use(route.get('/book/:id', book));
 app.use(route.post('/', scrape));
 
@@ -34,7 +36,21 @@ function *scrape() {
 
     this.session.url = post.url;
 
-    var scrapedData = yield scraper(post.url);
+    var freeDay = yield freeDayFinder(post.url);
+
+    console.log(freeDay);
+
+    if (freeDay.length > 1) {
+        this.body = yield render('dayChooser', {days: freeDay});
+    } else {
+        this.redirect(`/day/${freeDay}`);
+    }
+}
+
+function *day(id) {
+    var url = this.session.url;
+    var dayToMeet = id;
+    var scrapedData = yield scraper(url, dayToMeet);
 
     this.body = yield render('results', {data: scrapedData});
 }

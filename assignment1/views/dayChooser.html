@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block title %}Välj dag{% endblock %}
+
+{% block content %}
+    <h1>Vilken dag?</h1>
+    <p>Dessa dagar är alla vänner tillgängliga, när skall ni ses?</p>
+    {% for day in days %}
+    	<p><a href="/day/{{day}}">{{day}}</a></p>
+    {% endfor %}
+{% endblock %}

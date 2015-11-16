@@ -1,7 +1,6 @@
 var _ = require('lodash');
 
 var firstPageScraper = require('./firstPageScraper');
-var calendarScraper = require('./calendarScraper');
 var dinnerScraper = require('./dinnerScraper');
 var cinemaScraper = require('./cinemaScraper');
 var viewObjectMaker = require('./viewObjectMaker');
@@ -12,24 +11,17 @@ var dayTranslater = {
     'Sunday': 'Söndag'
 };
 
-var scraper = function*(uri) {
+var scraper = function*(uri, dayToMeet) {
 
     // Get the different links from the main page
     var mainPageLinks = yield firstPageScraper(uri);
 
-    // Find which link is to where
-    var calendarLink = _.find(mainPageLinks,
-        link => link.includes('calendar')
-    );
     var dinnerLink = _.find(mainPageLinks,
         link => link.includes('dinner')
     );
     var cinemaLink = _.find(mainPageLinks,
         link => link.includes('cinema')
     );
-
-    // Find the links to the three friends calendars
-    var dayToMeet = yield calendarScraper(calendarLink);
 
     // Find bookable movies
     var bookableMovies = yield cinemaScraper(cinemaLink,
