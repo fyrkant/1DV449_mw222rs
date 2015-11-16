@@ -1,23 +1,33 @@
-var calendarScraper = function($) {
-    var days = [];
-    var foundFreeDays = [];
+var rp = require('request-promise');
+var cheerio = require('cheerio');
+var personalCalendarScraper = require('./personalCalendarScraper');
+var _ = require('lodash');
 
-    $('th').each(function() {
-        var day = $(this).text();
+var calendarScraper = function*(url) {
+    var calendarLinks = yield rp(url).
+        then(body => cheerio.load(body)).
+        then($ => {
+            var personLinks = [];
 
-        days.push(day);
-    });
-    $('td').each(function() {
-        var text = $(this).text();
-        var index = $('td').index(this);
+            $('a').each(function() {
+                personLinks.push(
+                    `${url}/${$(this).attr('href')}`);
+            });
+            return personLinks;
+        });
 
-        if (text.toLowerCase() === 'ok') {
-            foundFreeDays.push(days[index]);
-        }
-    });
-    //freeDays[name] = foundFreeDays;
-    //console.log('calendarScraper: ',foundFreeDays);
-    return foundFreeDays;
+    // Find which days the friends are free
+    var freeDays = calendarLinks.map(link =>
+        rp(link).
+        then(body => cheerio.load(body)).
+        then($ => personalCalendarScraper($))
+    );
+
+    freeDays = yield Promise.all(freeDays).
+        then(values => values);
+
+    return freeDays.reduce((one, two) => _.intersection(one,two));
+
 };
 
 module.exports = calendarScraper;
