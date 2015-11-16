@@ -1,6 +1,5 @@
 var render = require('./lib/render');
 var logger = require('koa-logger');
-var validate = require('koa-validate');
 var route = require('koa-route');
 var parse = require('co-body');
 var koa = require('koa');
@@ -13,7 +12,6 @@ var scraper = require('./scraper/scraper');
 app.keys = ['super secret stuff'];
 
 app.use(logger());
-app.use(validate());
 app.use(session(app));
 
 app.use(route.get('/', index));
@@ -31,6 +29,7 @@ function *scrape() {
     // If the posted url doesn't have the http:// in front, add it.
     post.url = post.url.substr(0, prefix.length) !== prefix ?
         prefix + post.url : post.url;
+    // Remove any trailing slashes.
     post.url = post.url.replace(/\/+$/, '');
 
     this.session.url = post.url;

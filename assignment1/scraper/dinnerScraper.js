@@ -1,9 +1,10 @@
 var rp = require('request-promise');
-var cheerio = require('cheerio');
+var options = require('./scraperOptions');
 
 var dinnerScraper = function*(url, dayToMeet, dayTranslater) {
-    var dinnerData =  yield rp(url).
-        then(body => cheerio.load(body)).
+    options.uri = url;
+
+    var dinnerData =  yield rp(options).
         then($ => {
             var daySmallNoDots = dayTranslater[dayToMeet].
                 toLowerCase().replace(/ö/g, 'o').substr(0, 3);

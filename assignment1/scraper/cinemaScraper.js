@@ -1,14 +1,15 @@
 var rp = require('request-promise');
-var cheerio = require('cheerio');
 var _ = require('lodash');
+var options = require('./scraperOptions');
 
 var cinemaScraper = function*(url, dayToMeet, dayTranslater) {
     var valueOfDayToMeet;
     var movieOptionValues = [];
     var movieNames = [];
 
-    yield rp(url).
-        then(body => cheerio.load(body)).
+    options.uri = url;
+
+    yield rp(options).
         then($ => {
             var query = `option:contains(${dayTranslater[dayToMeet]})`;
 

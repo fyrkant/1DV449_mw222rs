@@ -5,6 +5,7 @@ var calendarScraper = require('./calendarScraper');
 var dinnerScraper = require('./dinnerScraper');
 var cinemaScraper = require('./cinemaScraper');
 var viewObjectMaker = require('./viewObjectMaker');
+
 var dayTranslater = {
     'Friday': 'Fredag',
     'Saturday': 'Lördag',

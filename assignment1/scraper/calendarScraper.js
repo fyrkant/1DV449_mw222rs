@@ -2,10 +2,12 @@ var rp = require('request-promise');
 var cheerio = require('cheerio');
 var personalCalendarScraper = require('./personalCalendarScraper');
 var _ = require('lodash');
+var options = require('./scraperOptions');
 
 var calendarScraper = function*(url) {
-    var calendarLinks = yield rp(url).
-        then(body => cheerio.load(body)).
+    options.uri = url;
+
+    var calendarLinks = yield rp(options).
         then($ => {
             var personLinks = [];
 

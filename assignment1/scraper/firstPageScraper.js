@@ -1,9 +1,9 @@
 var rp = require('request-promise');
-var cheerio = require('cheerio');
+var options = require('./scraperOptions');
 
 var firstPageScraper = function*(url) {
-    var links = yield rp(url).
-        then(body => cheerio.load(body)).
+    options.uri = url;
+    var links = yield rp(options).
         then($ => {
             var mainPageLinks = {};
 
