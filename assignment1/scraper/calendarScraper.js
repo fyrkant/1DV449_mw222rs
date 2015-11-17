@@ -3,6 +3,7 @@ var cheerio = require('cheerio');
 var personalCalendarScraper = require('./personalCalendarScraper');
 var _ = require('lodash');
 var options = require('./scraperOptions');
+var dayTranslater = require('./dayTranslater');
 
 var calendarScraper = function*(url) {
     options.uri = url;
@@ -26,14 +27,17 @@ var calendarScraper = function*(url) {
     );
 
     freeDays = yield Promise.all(freeDays).
-        then(values => values);
+        then(values => values.map(personalFreeDays =>
+            personalFreeDays.map(day => day.toLowerCase())));
 
-    var toReturn = freeDays.reduce((one, two) => _.intersection(one,two));
+    freeDays = freeDays.reduce((one, two) => _.intersection(one,two)).
+        map(day => {
+            var toReturn = {eng: day, swe: dayTranslater[day]};
 
-    console.log(toReturn);
+            return toReturn;
+        });
 
-    return toReturn;
-
+    return freeDays;
 };
 
 module.exports = calendarScraper;

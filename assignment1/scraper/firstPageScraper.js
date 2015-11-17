@@ -7,8 +7,10 @@ var firstPageScraper = function*(url) {
         then($ => {
             var mainPageLinks = {};
 
+            mainPageLinks.firstPage = url;
+
             $('a').each(function() {
-                mainPageLinks[$('a').index(this)] =
+                mainPageLinks[$(this).attr('href').replace('/', '')] =
                     url + $(this).attr('href');
             });
             return mainPageLinks;

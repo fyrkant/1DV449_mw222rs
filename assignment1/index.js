@@ -8,7 +8,8 @@ var session = require('koa-session');
 var app = koa();
 
 var scraper = require('./scraper/scraper');
-var freeDayFinder = require('./scraper/freeDayFinder');
+var firstPageScraper = require('./scraper/firstPageScraper');
+var calendarScraper = require('./scraper/calendarScraper');
 
 app.keys = ['super secret stuff'];
 
@@ -17,6 +18,7 @@ app.use(session(app));
 
 app.use(route.get('/', index));
 app.use(route.get('/day/:id', day));
+app.use(route.get('/choose-day', dayChooser));
 app.use(route.get('/book/:id', book));
 app.use(route.post('/', scrape));
 
@@ -34,29 +36,40 @@ function *scrape() {
     // Remove any trailing slashes.
     post.url = post.url.replace(/\/+$/, '');
 
-    this.session.url = post.url;
+    // Get all links from first page and save to session cookie.
+    this.session.urls = yield firstPageScraper(post.url);
 
-    var freeDay = yield freeDayFinder(post.url);
+    // Scrape calendar to find day(s) when the friends can meet.
+    this.session.freeDays = yield calendarScraper(this.session.urls.calendar);
 
-    console.log(freeDay);
-
-    if (freeDay.length > 1) {
-        this.body = yield render('dayChooser', {days: freeDay});
+    // If more than one day is avalable...
+    if (this.session.freeDays.length > 1) {
+        // Let the user choose which...
+        this.redirect('/choose-day');
     } else {
-        this.redirect(`/day/${freeDay}`);
+        // ... Else send directly to results.
+        this.redirect(`/day/${this.session.freeDays[0].eng}`);
+    }
+}
+
+function *dayChooser() {
+    if (this.session.freeDays !== undefined) {
+        this.body = yield render('dayChooser', {days: this.session.freeDays});
+    } else {
+        this.redirect('/');
     }
 }
 
 function *day(id) {
-    var url = this.session.url;
+    var urls = this.session.urls;
     var dayToMeet = id;
-    var scrapedData = yield scraper(url, dayToMeet);
+    var scrapedData = yield scraper(urls, dayToMeet);
 
     this.body = yield render('results', {data: scrapedData});
 }
 
 function *book(id) {
-    var url = `${this.session.url}/dinner/login`;
+    var url = `${this.session.urls.dinner}/login`;
     var username = 'zeke';
     var password = 'coys';
     var options = {
@@ -72,7 +85,7 @@ function *book(id) {
     var postRequest = yield rp(options).then(res => res).
         catch(err => console.log(err));
 
-    this.body = postRequest;
+    this.body = yield render('booked', {message: postRequest});
 }
 
 app.listen(3000);

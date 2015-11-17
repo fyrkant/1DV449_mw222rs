@@ -6,6 +6,6 @@
     <h1>Vilken dag?</h1>
     <p>Dessa dagar är alla vänner tillgängliga, när skall ni ses?</p>
     {% for day in days %}
-    	<p><a href="/day/{{day}}">{{day}}</a></p>
+    	<p><a href="/day/{{day.eng}}">{{day.swe}}</a></p>
     {% endfor %}
 {% endblock %}
