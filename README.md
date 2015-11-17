@@ -20,3 +20,4 @@ En `robots.txt`-fil säger genom ["robots exclusion standard"][2] till indexerin
 
 [1]: https://en.wikipedia.org/wiki/Web_scraping#Legal_issues
 [2]: https://en.wikipedia.org/wiki/Robots_exclusion_standard#About_the_standard
+[3]: http://188.166.107.162/
