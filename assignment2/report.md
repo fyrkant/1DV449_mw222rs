@@ -56,14 +56,18 @@ The fix is just like the above, make sure the application authenticates that the
 ## Performance
 As stated in Steve Souders High Performance WebSites: Essential Knowledge for Front-End Developers: 
 > ”Only 10–20% of the end user response time is spent downloading the HTML document. The other 80–90% is spent downloading all the components in the page.” [6, p. 28]
-This means that by only doing small changes on the front-end of the application huge savings in response times can be made, and in this section I will be going over a few changes I think that could have a positive effect on the response time in Labby Message:
+This means that by only doing small changes on the front-end of the application huge savings in response times can be made, and in this section I will be going over a few changes I think that could have a positive effect on the response time in Labby Message.
 
-## 1. Combine scripts and css to reduce HTTP requests
+### 1. Combine scripts and css to reduce HTTP requests
 The response time for any web application heavily depends on the amount of HTTP requests that the application has to do to the server for every render of page [6, p. 33] and this means that by reducing the amount of HTTP requests made we can increase the speed of the application loading. 
 
-One easy way of doing this is to combine scripts and stylesheets [6, p. 38] and this is something that I think is extremely applicable to this application. Seeing as the  
+One easy way of doing this is to combine scripts and stylesheets [6, p. 38] and this is something that I think is extremely applicable to Labby Message. Seeing as the  Application is as small as it is very unnecessary that the client-side JavaScript is divided in to several different files, they should be minified and combined using some kind of build tool to remove at least three files from the initial request.
 
-## Reflection
+The same goes with the CSS, as it is now   
+
+### Reflection
+Reflecting back on this assignment I feel that I have really realized how important it is to always have security on your mind throughout the whole development process. There are so many different kinds of ways to get 
+
 
 ## References
 [1] The Open Web Application Security Project, ”OWASP Top 10 -2013, The Ten Most Critical Web Application Security Risks”, OWASP.org, June 2013 [Online]. Available: http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf.[Accessed: 2015/11/23]. 
