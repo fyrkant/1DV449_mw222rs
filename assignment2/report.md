@@ -63,17 +63,24 @@ The response time for any web application heavily depends on the amount of HTTP 
 
 One easy way of doing this is to combine scripts and stylesheets [6, p. 38] and this is something that I think is extremely applicable to Labby Message. Seeing as the  Application is as small as it is very unnecessary that the client-side JavaScript is divided in to several different files, they should be minified and combined using some kind of build tool to remove at least three files from the initial request.
 
-The same goes with the CSS, as it is now   
+The same goes with the CSS, as it is now 
 
-### Reflection
-Reflecting back on this assignment I feel that I have really realized how important it is to always have security on your mind throughout the whole development process. There are so many different kinds of ways to get 
+## Reflection
+Reflecting back on this assignment I feel that I have really realized how important it is to always have security on your mind throughout the whole development process. There are so many different kinds of attacks that you can become the victim of that it almost feels impossible to cover up for all of it. Therefore it’s a wonderful thing that projects like OWASP exist, trying to spread the knowledge of what risks exist and also how to prevent them. 
+
+
 
 
 ## References
-[1] The Open Web Application Security Project, ”OWASP Top 10 -2013, The Ten Most Critical Web Application Security Risks”, OWASP.org, June 2013 [Online]. Available: http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf.[Accessed: 2015/11/23]. 
+[1] The Open Web Application Security Project, ”OWASP Top 10 -2013, The Ten Most Critical Web Application Security Risks”, OWASP.org, June 2013 [Online]. Available: http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf.[Accessed: 2015/11/23]
+
 [2] Common Weakness Enumeration, ”CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection’)”, we.mitre.org, July 2014 [Online]. Available: http://cwe.mitre.org/data/definitions/89.html. [Accessed: 2015/12/2] 
+
 [3] The Open Web Application Security Project, ”Session Management Cheat Sheet”, OWASP.org, October 2015 [Online]. Available: https://www.owasp.org/index.php/Session_Management_Cheat_Sheet. [Accessed: 2015/12/2]
+
 [4] The Open Web Application Security Project, ”Authentication Cheat Sheet”, OWASP.org, October 2015 [Online]. Available: https://www.owasp.org/index.php/Authentication_Cheat_Sheet. [Accessed: 2015/12/2]
+
 [5] The Open Web Application Security Project, ”XSS Prevention Cheat sheet”, OWASP.org, December 2015 [Online]. Available: https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet. [Accessed: 2015/12/2]
+
 [6] S.  Souders, High performance web sites. Farnham: O'Reilly, 2007. [Online] Available: Google Play e-book.
 
