@@ -55,18 +55,50 @@ The fix is just like the above, make sure the application authenticates that the
 
 ## Performance
 As stated in Steve Souders High Performance WebSites: Essential Knowledge for Front-End Developers: 
+
 > ”Only 10–20% of the end user response time is spent downloading the HTML document. The other 80–90% is spent downloading all the components in the page.” [6, p. 28]
+
 This means that by only doing small changes on the front-end of the application huge savings in response times can be made, and in this section I will be going over a few changes I think that could have a positive effect on the response time in Labby Message.
 
 ### 1. Combine scripts and css to reduce HTTP requests
-The response time for any web application heavily depends on the amount of HTTP requests that the application has to do to the server for every render of page [6, p. 33] and this means that by reducing the amount of HTTP requests made we can increase the speed of the application loading. 
+The response time for any web application heavily depends on the amount of HTTP requests that the application has to do to the server [6, p. 33] and this means that by reducing the amount of HTTP requests made we can increase the speed of the application loading. 
 
-One easy way of doing this is to combine scripts and stylesheets [6, p. 38] and this is something that I think is extremely applicable to Labby Message. Seeing as the  Application is as small as it is very unnecessary that the client-side JavaScript is divided in to several different files, they should be minified and combined using some kind of build tool to remove at least three files from the initial request.
+One easy way of doing this is to combine scripts and stylesheets [6, p. 38] and this is something that I think is extremely applicable to Labby Message. Seeing as the  Application is as small as it is very unnecessary that the client-side JavaScript is divided in to several different files, they should be minified and combined using some kind of build tool [6, p. 39] to remove at least three files from the initial request. 
 
-The same goes with the CSS, as it is now 
+The same goes with the CSS, instead of putting having several .css files they should with the help of a build tool be combined and minified. This should in decrease the file requests by 2. 
+
+### 2. Use a CDN for components
+Another way to reduce requests made to your server is to make use of a Content Delivery Network (CDN for short) [6, p. 40]. A CDN is a service that lets you take your *web components* - that is things like CSS, client side JavaScript and images - and move them to another server apart from your *application server*, and the good thing with a CDN service is that it is a collection of servers that helps reducing the page load time of your application by serving the content to your user from a server as close to the user as possible. 
+
+Due to the small size of Labby Message it might be a bit of an overkill to use a CDN for your own content, but for something like Bootstrap - which is used in Labby Message - there are free CDN solutions such as the one found on [bootstrapcn.com](https://www.bootstrapcdn.com/) which can help you out without even wanting a dollar for it. 
+
+### 3. Add an ”expires” header to your components
+While it won’t help reducing initial load time, by adding a ”far future” Expires-header when serving the browser with components you can tell the browser that it’s OK to cache these components and by doing that reducing load time on subsequent page load times [6, p. 45]. A *far future* expires-header means a header that sets the date of expiration for the component as far in the future and might look something like: `Expires: Tue, 7 Feb 2017 12:00:00 GMT`. 
+
+This is of course a very useful feature for big and static components but a thing to note is that when using this you will have to change the filename of the component every time the component changes [7], although this is also something that a build tool can take care of.
+
+### 4. Use gzip
+HTTP can, paired with a browser supporting it, compress all components sent to the user client using gzip compression [6, p. 51] by adding `Content-Encoding: gzip` to your response header. It is worth mentioning that all files should not be compressed, already compressed file types like images or PDFs re best left in the unzipped state [6, p. 53] while any kind of text file - be it HTML, JavaScript, CSS, JSON or XML - will happily be compressed. 
+
+Using gzip to decrease the size of the data (up to over 70% size reduction can be achieved [6, p. 58]) sent back to the user in your HTTP response is an easy way to increase page load times dramatically. Although for a tiny application like Labby Message one could argue that it might not be worth the effort.
+
+### 5. Put CSS in the document head
+Putting stylesheets in the **head** of the document instead of inside of the body allows the page to **render progressively** [6, p. 59]. This simply means that the page will be rendered as the content is downloaded from the server, and the page itself will work as a kind of progress indicator for how the download of the content is progressing. Putting CSS at the bottom of the document, inside of the body tag, the rendering will be blocked and the ”progress indicator” effect is no longer present - just a blank screen and then the rendered page.
+
+In the `/message` view of Labby Message the style has been put inside of the body and although the load time is so fast that it is hard to notice, this blocks the page from rendering progressively. The the CSS should be lifted from the page, put in a separate CSS file and linked in the head of the document using the link tag.
+
+### 6. Remove unused CSS
+Using the Inspector tool in the Google Chrome web browser it is easy to confirm that over 90% of all CSS linked to the pages of Labby Message is unused. This is mostly the fault of the huge bootstrap css file and a relevant question to ask might be: do I really need bootstrap for this tiny application? Perhaps by putting just a little bit more effort to write your own CSS rules you could do away with bootstrap and with it get rid of one pretty big file that needs to go from your server to the users browser. 
+
+### 7. No 404s
+Making requests for files that do not exist are a huge waste of time and should be removed from the application [7] (or fixed by putting in the correct search path). Labby Message suffers from this with it having broken links to the materialize CSS and JavaScript in the head of the HTML document. 
 
 ## Reflection
-Reflecting back on this assignment I feel that I have really realized how important it is to always have security on your mind throughout the whole development process. There are so many different kinds of attacks that you can become the victim of that it almost feels impossible to cover up for all of it. Therefore it’s a wonderful thing that projects like OWASP exist, trying to spread the knowledge of what risks exist and also how to prevent them. 
+Reflecting back on this assignment I feel that I have really understood how important it is to **always** have security int he back of your head throughout the whole development process. There are so many different kinds of attacks that you can become the victim of that it almost feels impossible to cover up for all of it. Therefore it’s a wonderful thing that projects like OWASP exist, trying to spread the knowledge of what risks exist and also how to prevent them. 
+
+The same can also be said about web performance - there are so much that can be done to make your web application perform as good as it possibly can. 
+
+Both of these areas - Security and Performance -
 
 
 
@@ -83,4 +115,6 @@ Reflecting back on this assignment I feel that I have really realized how import
 [5] The Open Web Application Security Project, ”XSS Prevention Cheat sheet”, OWASP.org, December 2015 [Online]. Available: https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet. [Accessed: 2015/12/2]
 
 [6] S.  Souders, High performance web sites. Farnham: O'Reilly, 2007. [Online] Available: Google Play e-book.
+
+[7] Yahoo Developer Network, ”Best Practices for Speeding Up Your Web Site”, developer.yahoo.com, [Online]. Available: https://developer.yahoo.com/performance/rules.html [Accessed: 2015/12/2]
 
