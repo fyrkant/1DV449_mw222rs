@@ -1,4 +1,4 @@
-# Messy Labbage Security Report
+# Labby Message Security & Performance Report
 ## By: Mattias Wikström, mw222rs
 
 ## Introduction
