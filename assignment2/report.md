@@ -11,18 +11,18 @@ Let ut start with the most important part of any application that wants to keep 
 ### Problem 1: Injection
 In the OWASP Top Ten Most Critical Web Application Security Risks list from 2013 [1] the thing that tops the list as the most critical and potentially damaging risk is stated to be *injection* [1, p. 7]. Sadly enough, this is also something that Labby Message suffers from. 
 
-On the very first page where the user is supposed to enter his/her email and password to log in to see the message board it is possible to instead of entering a valid password/email combination just enter anything that validates as an email address and then inject some SQL code like the statement `notMyPass’ OR ’1’=’1` (which will just override the servers check if the password exists in the database because 1=1 will always be true) and bypass the authentication entirely. 
+On the very first page where the user is supposed to enter his/her email and password to log in to see the message board it is possible to instead of entering a valid password/email combination just enter anything that validates as an email address and then inject some SQL code like the statement `notMyPass' OR '1'='1` (which will just override the servers check if the password exists in the database because 1=1 will always be true) and bypass the authentication entirely. 
 
 This is possible to do because the application does a direct query to the SQL database and is quite easily fixed by removing this direct connection between the user input and queries to the database. This is most often achieved with parameterized interfaces to the database, for example using stored procedures.  [1, p. 7]
 
-Furthermore, while the HTML5 feature of adding a type of email to the login page email input-tag to make sure that only something that validates as an email address will be posted to the server will help the average user it does not in any way stop potential attacks on the system. Using a service like Postman to do HTTP requests to the application using something else than the browser you can actually just omit the email address completely and with the SQL injection in the password field be authorized as a logged in user. The email needs to be validated on the server as well [2, Potential Mitigation], before it is passed as a query to the database. 
+Furthermore, while the HTML5 feature of adding a type of email to the login page email input-tag to make sure that only something that validates as an email address will be posted to the server will help the average user it does not in any way stop potential attacks on the system. Using a service like Postman, to do HTTP requests to the application using something else than the browser, you can actually just omit the email address completely and with the SQL injection in the password field be authorized as a logged in user. The email needs to be validated on the server as well [2, Potential Mitigation], before it is passed as a query to the database. 
 
 ### Problem 2: Broken authentication and Session Management
 The second risk listed on the OWASP Top Ten is having a broken authentication system and poorly managed session management [1, p. 8] and once again I am sorry that this is something that Labby Message suffers badly from. 
 
-With this I am not just reiterating the use of injection to bypass the authentication entirely, but instead I am talking about the fact that even after a logged in user has pressed the "logout" link and been redirected to the start page is is possible to direct the browser to /message and see all messages on the message board. 
+With this I am not just reiterating the use of injection to bypass the authentication entirely, but instead I am talking about the fact that even after a logged in user has pressed the "logout" link and been redirected to the start page is is possible to direct the browser to `/message` and see all messages on the message board. 
 
-This seems to be a bug caused by a faulty handling of session cookies, and is not only damaging from a security perspective (where someone could use a "logged out" users browser and see all messages) but also utterly confusing for the user in that while it is possible to go back to the message board and see all messages in this faux logged out state it is not possible to post a new post. It is therefore quite easy to imagine a user being confused in whether he/she is logged in or not, seing as there are no warning messages or anything else prompting the user to go back to the login page and actually log in to be able to post new messages.
+This seems to be a bug caused by a faulty handling of session cookies, and is not only damaging from a security perspective (where someone could use a "logged out" users browser and see all messages) but also utterly confusing for the user in that while it is possible to go back to the message board and see all messages in this faux logged out state it is not possible to post a new post. It is therefore quite easy to imagine a user being confused in whether he/she is logged in or not, seeing as there are no warning messages or anything else prompting the user to go back to the login page and actually log in to be able to post new messages.
 
 The Session should be removed entirely when the user logs out and even when the user doesn’t log out the application should have some kind of functionality that checks for sessionID anomalies [3]. 
 
@@ -34,11 +34,11 @@ Another severe risk in the authentication in Labby Message is the fact that pass
 
 
 ### Problem 3: Cross site scripting
-You might notice a pattern now, because the third security issue with Labby Message is also the third risk in the OWASP Top Ten list, namely Cross Site Scripting (XSS for short) [1, p. 9].
+You might notice a pattern now, because the third security issue with Labby Message is also the third risk in the OWASP Top Ten list, namely Cross Site Scripting (**XSS** for short) [1, p. 9].
 
-A vulnerability to XSS is created when unescaped input is allowed to render on the page, which allows any evil user to enter their own scripts into your page. This could severly endanger your users by for example hiding some javascript in a link that looks completely harmless but when clicked on grabs the "document.cookie" to get the session of the logged in user and sends it off to our evil users homepage. 
+A vulnerability to XSS is created when unescaped input is allowed to render on the page, which allows any evil user to enter their own scripts into your page. This could severely endanger your users by for example hiding some javascript in a link that looks completely harmless but when clicked on grabs the "document.cookie" to get the session of the logged in user and sends it off to our evil users homepage. 
 
-Unfortunately this is also a problem in the Labby Message  application. An anchor tag can be created with the href attribute given the value "javascript:<EVIL CODE>" to inject evil Javascript into the rendered page. This primarily be fixed by validating the input and not allow anything that can be seen as harmful code to be saved, or if it should be allowed to be saved all harmful characters should be escaped and replaced with their HTML representations. 
+Unfortunately this is also a problem in the Labby Message  application. An anchor tag can be created with the href attribute given the value "javascript:<EVIL CODE>" to inject evil Javascript into the rendered page. This can be fixed by validating the input and not allow anything that can be seen as harmful code to be saved - or if it should be allowed to be saved all harmful characters should be escaped and replaced with their HTML representations before being rendered on the page. 
 
 As it is now all input is saved but filtered when rendered on the page so that some bad input is taken away. This is obviously not working well enough, because as well as the "javascript:" in the anchor tag’s href attribute it is also possible to add things like the onclick attribute with some javascript like "onclick=window.location="www.evilpage.com"" to fool any user into going to some bad webpage. 
 
@@ -65,7 +65,7 @@ The response time for any web application heavily depends on the amount of HTTP 
 
 One easy way of doing this is to combine scripts and stylesheets [6, p. 38] and this is something that I think is extremely applicable to Labby Message. Seeing as the  Application is as small as it is very unnecessary that the client-side JavaScript is divided in to several different files, they should be minified and combined using some kind of build tool [6, p. 39] to remove at least three files from the initial request. 
 
-The same goes with the CSS, instead of putting having several .css files they should with the help of a build tool be combined and minified. This should in decrease the file requests by 2. 
+The same goes with the CSS, instead of putting having several .css files they should with the help of a build tool be combined and minified. This should decrease the file requests by 2. 
 
 ### 2. Use a CDN for components
 Another way to reduce requests made to your server is to make use of a Content Delivery Network (CDN for short) [6, p. 40]. A CDN is a service that lets you take your *web components* - that is things like CSS, client side JavaScript and images - and move them to another server apart from your *application server*, and the good thing with a CDN service is that it is a collection of servers that helps reducing the page load time of your application by serving the content to your user from a server as close to the user as possible. 
@@ -75,15 +75,15 @@ Due to the small size of Labby Message it might be a bit of an overkill to use a
 ### 3. Add an "expires" header to your components
 While it won’t help reducing initial load time, by adding a "far future" Expires-header when serving the browser with components you can tell the browser that it’s OK to cache these components and by doing that reducing load time on subsequent page load times [6, p. 45]. A *far future* expires-header means a header that sets the date of expiration for the component as far in the future and might look something like: `Expires: Tue, 7 Feb 2017 12:00:00 GMT`. 
 
-This is of course a very useful feature for big and static components but a thing to note is that when using this you will have to change the filename of the component every time the component changes [7], although this is also something that a build tool can take care of.
+This is of course a very useful feature for big and static components but a thing to note is that when using this you will have to change the filename of the component every time the component changes [7] to make sure any cached versions are replaced for the user, although this is also something that a build tool can take care of.
 
 ### 4. Use gzip
-HTTP can, paired with a browser supporting it, compress all components sent to the user client using gzip compression [6, p. 51] by adding `Content-Encoding: gzip` to your response header. It is worth mentioning that all files should not be compressed, already compressed file types like images or PDFs re best left in the unzipped state [6, p. 53] while any kind of text file - be it HTML, JavaScript, CSS, JSON or XML - will happily be compressed. 
+HTTP can, paired with a browser supporting it, compress all components sent to the user client using gzip compression [6, p. 51] by adding `Content-Encoding: gzip` to your response header. It is worth mentioning that all files should not be compressed, already compressed file types like images or PDFs are best left in their unzipped state [6, p. 53] while any kind of text file - be it HTML, JavaScript, CSS, JSON or XML - will happily be compressed. 
 
-Using gzip to decrease the size of the data (up to over 70% size reduction can be achieved [6, p. 58]) sent back to the user in your HTTP response is an easy way to increase page load times dramatically. Although for a tiny application like Labby Message one could argue that it might not be worth the effort.
+Using gzip to decrease the size (up to over 70% size reduction can be achieved [6, p. 58]) of the data sent back to the user in your HTTP response is an easy way to increase page load times dramatically. Although for a tiny application like Labby Message one could argue that it might not be worth the effort.
 
 ### 5. Put CSS in the document head
-Putting stylesheets in the **head** of the document instead of inside of the body allows the page to **render progressively** [6, p. 59]. This simply means that the page will be rendered as the content is downloaded from the server, and the page itself will work as a kind of progress indicator for how the download of the content is progressing. Putting CSS at the bottom of the document, inside of the body tag, the rendering will be blocked and the "progress indicator" effect is no longer present - just a blank screen and then the rendered page.
+Putting stylesheets in the **head** of the document instead of inside of the body allows the page to **render progressively** [6, p. 59]. This simply means that the page will be rendered as the content is downloaded from the server, and the page itself will work as a kind of progress indicator for how the download of the content is progressing. Putting CSS at the bottom of the document, inside of the body tag, the rendering will be blocked and the "progress indicator" effect is no longer present - just a blank screen for a while and then the rendered page.
 
 In the `/message` view of Labby Message the style has been put inside of the body and although the load time is so fast that it is hard to notice, this blocks the page from rendering progressively. The the CSS should be lifted from the page, put in a separate CSS file and linked in the head of the document using the link tag.
 
@@ -94,13 +94,17 @@ Using the Inspector tool in the Google Chrome web browser it is easy to confirm 
 Making requests for files that do not exist are a huge waste of time and should be removed from the application [7] (or fixed by putting in the correct search path). Labby Message suffers from this with it having broken links to the materialize CSS and JavaScript in the head of the HTML document. 
 
 ## Reflection
-Reflecting back on this assignment I feel that I have really understood how important it is to **always** have security int he back of your head throughout the whole development process. There are so many different kinds of attacks that you can become the victim of that it almost feels impossible to cover up for all of it. Therefore it’s a wonderful thing that projects like OWASP exist, trying to spread the knowledge of what risks exist and also how to prevent them. 
+Reflecting back on this assignment I feel that I have really understood how important it is to **always** have security in the back of your head throughout the whole development process. There are so many different kinds of attacks that you can become the victim of that it almost feels impossible to cover up for all of it. Therefore it’s a wonderful thing that projects like OWASP exist, trying to spread the knowledge of what risks exist and also how to prevent them. 
 
-The same can also be said about web performance - there are so much that can be done to make your web application perform as good as it possibly can. 
+The same can be said about web performance - there are so much that can be done to make your web application perform as good as it possibly can. 
 
-Both of these areas - Security and Performance -
+Both of these areas - Security and Performance - are perhaps the two things that I find most challenging with developing web applications. It is easy to get caught up in the implementation of new functionality, just diving deep into the coding part of the process and then rush past Security and Performance - putting in some less than ideal solutions just to get things working and then forget to go back and fix these later on when the system is going live. This is how I believe that a lot of security holes and performance problems occur - what begins as a temporary solution ends up being the solution used in the end product, leaving faulty security and badly performing components as is. 
 
+Doing this assignment I in a way realized the danger in this, because no matter how good the functionality and design is of your app - if an evil outside actor hacks it and steals your users information your users will most definitely leave and never come back. The same goes with the performance, I know this from my own experiences, even if an app or service is functionally good - if the load times are too much to bare I will not use it. 
 
+To sum things up: **make sure to create time for making sure that your application is up to a good Security and performance standard *during* the development**. 
+
+Future you will thank you for it.
 
 
 ## References
