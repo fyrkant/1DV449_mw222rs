@@ -8,9 +8,10 @@ app.ws.use(route.all('/data/', function* (next) {
     // `this` is the regular koa context created from the `ws` onConnection `socket.upgradeReq` object.
     // the websocket is added to the context on `this.websocket`.
     this.websocket.send('Hello World');
-    this.websocket.on('message', function(message) {
+    this.websocket.on('message', (message) => {
         // do something with the message from client
-        console.log(message);
+        console.log(message.toUpperCase());
+        this.websocket.send('data');
     });
     // yielding `next` will pass the context (this) on to the next ws middleware
     yield next;

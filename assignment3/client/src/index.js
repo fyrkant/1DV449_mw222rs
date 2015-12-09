@@ -1,17 +1,15 @@
 import React from 'react';
 import {render} from 'react-dom';
+import {Provider} from 'react-redux';
+import store from './store';
+import actions from './actions.js';
+import Test from './components/test';
 
-let ws = new WebSocket('ws:localhost:3000/data');
+render(
+	<Provider store={store}>
+		<Test/>
+	</Provider>, 
+	document.getElementById('root')
+);
 
-export class Test extends React.Component {
-	clickHandler() {
-		ws.send('clicked');
-	}
-	render() {
-		return (
-			<div onClick={this.clickHandler}>hi</div>
-		);
-	}
-}
-
-render(<Test/>, document.getElementById('root'));
+setTimeout(() => store.dispatch(actions.startListeningToSocket()));
