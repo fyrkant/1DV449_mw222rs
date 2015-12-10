@@ -2,6 +2,7 @@
 
 const rp = require('request-promise');
 const fs = require('fs');
+const m = require('moment');
 const directory = 'cache';
 const file = '/cache.json';
 
@@ -18,12 +19,19 @@ const srWrapper = function*() {
 
     data = fs.readFileSync(directory + file, 'utf8');
 
+    const parsed = JSON.parse(data);
+    const updateInterval = 5 * 60 * 1000;
+
+    if ((parsed.meta.time + updateInterval) / 1000 < new Date().getTime() / 1000) {
+        data = yield getNewData();
+    }
+
     return data;
 };
 
 const getNewData = function*() {
     const options = {
-        uri: 'http://api.sr.se/api/v2/traffic/messages?size=100&format=json',
+        uri: 'http://api.sr.se/api/v2/traffic/messages?size=100&format=json&sort=createddate',
         json: true
     };
 
@@ -44,4 +52,4 @@ const getNewData = function*() {
     return toSend;
 };
 
-module.exports = srWrapper;
+module.exports = {srWrapper, getNewData};

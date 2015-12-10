@@ -1,5 +1,5 @@
 import C from './constants';
-import initialState from './initialState';
+import initialState from './initialstate';
 
 export default (currentState, action) => {
     switch(action.type) {

@@ -4,8 +4,8 @@
   "description": "Assignment 1, 1DV449",
   "main": "index.js",
   "scripts": {
-    "mon": "nodemon index.js --ignore /client/* --ignore /cache.json --verbose",
-    "lint": "eslint client/src/**"
+    "ms": "nodemon index.js --ignore /client/* --ignore /cache.json --verbose",
+    "mc": "webpack-dev-server --hot --progress --colors -d"
   },
   "author": "mw222rs",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "koa-session": "^3.3.1",
     "koa-websocket": "^1.1.0",
     "lodash": "^3.10.1",
+    "moment": "^2.10.6",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "request-promise": "^1.0.2",

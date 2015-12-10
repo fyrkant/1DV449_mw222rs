@@ -4,7 +4,7 @@ let ws = new WebSocket('ws:localhost:3000/data');
 
 export default {
     connect() {
-        ws.send('hello!');
+        return () => ws.send('hello!');
     },
     startListeningToSocket() {
         return (dispatch, getState) => {
@@ -19,6 +19,6 @@ export default {
         };
     },
     sendTestClick() {
-        return () => {ws.send('click');};
+        return () => {ws.send('update');};
     }
 };

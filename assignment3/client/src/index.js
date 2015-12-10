@@ -15,5 +15,4 @@ render(
 setTimeout(() => {
     store.dispatch(actions.startListeningToSocket());
     store.dispatch(actions.connect());
-
 });
