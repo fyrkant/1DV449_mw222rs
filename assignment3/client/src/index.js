@@ -8,7 +8,7 @@ import Test from './components/test';
 render(
 	<Provider store={store}>
 		<Test/>
-	</Provider>, 
+	</Provider>,
 	document.getElementById('root')
 );
 

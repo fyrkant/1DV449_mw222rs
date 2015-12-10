@@ -17,6 +17,7 @@
             2,
             "always"
         ],
+        "dot-location": [2, "property"],
         "max-len": 0,
         "no-unused-vars": 2,
         "no-invalid-this": 0,
