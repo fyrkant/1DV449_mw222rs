@@ -5,15 +5,18 @@ import _ from 'lodash';
 
 class Test extends React.Component {
     render() {
-        console.log(this.props.data);
+        console.log(this.props.meta);
 
-        let nodes = _.map(this.props.data.messages || [], (message) => {
+        let timeSinceData = this.props.meta ? new Date(this.props.meta.time * 1000) : '';
+
+        let nodes = _.map(this.props.messages || [], (message) => {
             return <li key={message.id}>{message.title}</li>;
         });
 
         return (
             <div>
-                <div onClick={this.props.click}><h3>Ladda data</h3></div>
+                <button onClick={this.props.click}>Ladda data</button>
+                <p>{timeSinceData.toString()}</p>
                 <ul>{nodes || ''}</ul>
             </div>
         );
@@ -22,13 +25,14 @@ class Test extends React.Component {
 
 const mapStateToProps = (appState) => {
     return {
-        data: appState.data
+        messages: appState.data.messages, 
+        meta: appState.data.meta
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        click(message) {
+        click() {
             dispatch(actions.sendTestClick());
         }
     };

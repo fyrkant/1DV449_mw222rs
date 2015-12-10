@@ -12,4 +12,8 @@ render(
 	document.getElementById('root')
 );
 
-setTimeout(() => store.dispatch(actions.startListeningToSocket()));
+setTimeout(() => {
+    store.dispatch(actions.startListeningToSocket());
+    store.dispatch(actions.connect());
+
+});

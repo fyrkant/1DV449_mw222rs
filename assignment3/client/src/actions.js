@@ -3,6 +3,9 @@ import C from './constants';
 let ws = new WebSocket('ws:localhost:3000/data');
 
 export default {
+    connect() {
+        ws.send('hello!');
+    },
     startListeningToSocket() {
         return (dispatch, getState) => {
             console.log('obj');
