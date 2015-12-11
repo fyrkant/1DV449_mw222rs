@@ -8,8 +8,6 @@ m.locale('sv');
 
 class Test extends React.Component {
     render() {
-        console.log(this.props.messages);
-
         let timeSinceData = this.props.meta ?
         'Uppdaterades ' + m(this.props.meta.time).fromNow() : '';
 

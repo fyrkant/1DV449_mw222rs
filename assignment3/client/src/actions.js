@@ -3,20 +3,10 @@ import C from './constants';
 let ws = new WebSocket('ws:localhost:3000/data');
 
 export default {
-    connect() {
-        return () => ws.send('hello!');
-    },
-    startListeningToSocket() {
-        return (dispatch, getState) => {
-            console.log('obj');
-            ws.onmessage = (event) => {
-                console.log(event.data || 'empty');
-                dispatch({
-                    type: C.RECEIVING_DATA,
-                    data: JSON.parse(event.data)
-                });
-            };
-        };
+    getState(event) {
+        const action = {type: C.RECEIVING_DATA, data: JSON.parse(event.data)};
+
+        return action;
     },
     sendTestClick() {
         return () => {ws.send('update');};

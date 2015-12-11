@@ -12,7 +12,7 @@ render(
 	document.getElementById('root')
 );
 
-setTimeout(() => {
-    store.dispatch(actions.startListeningToSocket());
-    store.dispatch(actions.connect());
-});
+
+const websocket = new WebSocket('ws:localhost:3000/data');
+
+websocket.onmessage = event => store.dispatch(actions.getState(event));
