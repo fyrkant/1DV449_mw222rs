@@ -1,7 +1,7 @@
 {
   "name": "assignment1",
   "version": "0.0.1",
-  "description": "Assignment 1, 1DV449",
+  "description": "Assignment 3, 1DV449",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js --ignore /client/* --ignore /cache.json --verbose"
@@ -22,6 +22,7 @@
     "babel-preset-react": "^6.3.13",
     "eslint": "^1.9.0",
     "eslint-config-defaults": "^7.1.1",
+    "flightplan": "^0.6.7",
     "react-redux": "^4.0.0",
     "redux": "^3.0.4",
     "redux-thunk": "^1.0.0"

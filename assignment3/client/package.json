@@ -1,7 +1,7 @@
 {
   "name": "assignment1",
   "version": "0.0.1",
-  "description": "Assignment 1, 1DV449",
+  "description": "Assignment 3, 1DV449",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --hot --progress --colors -d"
