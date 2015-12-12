@@ -58,11 +58,7 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _actions = __webpack_require__(182);
-
-	var _actions2 = _interopRequireDefault(_actions);
-
-	var _test = __webpack_require__(183);
+	var _test = __webpack_require__(182);
 
 	var _test2 = _interopRequireDefault(_test);
 
@@ -73,12 +69,6 @@
 		{ store: _store2.default },
 		_react2.default.createElement(_test2.default, null)
 	), document.getElementById('root'));
-
-	var websocket = new WebSocket('ws:localhost:3000/data');
-
-	websocket.onmessage = function (event) {
-		return _store2.default.dispatch(_actions2.default.getState(event));
-	};
 
 /***/ },
 /* 1 */
@@ -20933,37 +20923,6 @@
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _constants = __webpack_require__(179);
-
-	var _constants2 = _interopRequireDefault(_constants);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ws = new WebSocket('ws:localhost:3000/data');
-
-	exports.default = {
-	    getState: function getState(event) {
-	        var action = { type: _constants2.default.RECEIVING_DATA, data: JSON.parse(event.data) };
-
-	        return action;
-	    },
-	    sendTestClick: function sendTestClick() {
-	        return function () {
-	            ws.send('update');
-	        };
-	    }
-	};
-
-/***/ },
-/* 183 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
@@ -20976,7 +20935,7 @@
 
 	var _reactRedux = __webpack_require__(159);
 
-	var _actions = __webpack_require__(182);
+	var _actions = __webpack_require__(183);
 
 	var _actions2 = _interopRequireDefault(_actions);
 
@@ -21061,6 +21020,37 @@
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Test);
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _constants = __webpack_require__(179);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var websocket = new WebSocket('ws:localhost:3000/data');
+
+	exports.default = {
+	    getState: function getState(event) {
+	        var action = { type: _constants2.default.RECEIVING_DATA, data: JSON.parse(event.data) };
+
+	        return action;
+	    },
+	    sendTestClick: function sendTestClick() {
+	        return function () {
+	            websocket.send('update');
+	        };
+	    }
+	};
 
 /***/ },
 /* 184 */

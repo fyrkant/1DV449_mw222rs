@@ -2,7 +2,6 @@
 
 const rp = require('request-promise');
 const fs = require('fs');
-const m = require('moment');
 const directory = 'cache';
 const file = '/cache.json';
 
