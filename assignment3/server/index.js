@@ -8,7 +8,9 @@ const actions = require('./src/actions');
 store.subscribe(
     () => {
         if (store.getState()) {
-            const action = JSON.stringify({type: 'RECEIVING_DATA', data: store.getState()});
+            const action = JSON.stringify(
+                {type: 'RECEIVING_DATA', data: store.getState()}
+            );
 
             wss.broadcast(action);
         }

@@ -1,14 +1,15 @@
 const fs = require('fs');
 const request = require('request');
 
-const file = 'cache/cache.json';
-const now = new Date().getTime();
+const file = './cache/cache.json';
 
 fs.watch(file, (event, filename) => console.log(event, filename));
 
 module.exports = {
     getData() {
         return (dispatch, getState) => {
+            // Only update if data is more than 5 min old.
+            const now = new Date().getTime();
             const updateInterval = 5 * 60 * 1000;
             const data = JSON.parse(fs.readFileSync(file));
 
@@ -21,6 +22,8 @@ module.exports = {
     },
     getNewData() {
         return (dispatch, getState) => {
+            const now = new Date().getTime();
+            
             request('http://api.sr.se/api/v2/traffic/messages?size=100&format=json',
                 (error, response, body) => {
                     if (!error && response.statusCode == 200) {
