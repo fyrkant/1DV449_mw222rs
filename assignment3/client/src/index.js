@@ -3,11 +3,11 @@ import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import store from './store';
 import {websocket} from './actions.js';
-import Test from './components/test';
+import Wrapper from './components/wrapper';
 
 render(
     <Provider store={store}>
-        <Test />
+        <Wrapper />
     </Provider>,
     document.getElementById('root')
 );

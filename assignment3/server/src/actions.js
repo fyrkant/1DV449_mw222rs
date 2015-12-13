@@ -10,10 +10,9 @@ module.exports = {
         return (dispatch, getState) => {
             // Only update if data is more than 5 min old.
             const now = new Date().getTime();
-            const updateInterval = 5 * 60 * 1000;
-            const data = JSON.parse(fs.readFileSync(file));
+            const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 
-            if ((data.meta.time + updateInterval) / 1000 < now / 1000) {
+            if (data.meta.bestBefore / 1000 < now / 1000) {
                 return this.getNewData();
             }
             console.log('dispatching cached data');
@@ -23,6 +22,7 @@ module.exports = {
     getNewData() {
         return (dispatch, getState) => {
             const now = new Date().getTime();
+            const bestBefore = now + 5 * 60 * 1000;
 
             request('http://api.sr.se/api/v2/traffic/messages?size=100&format=json',
                 (error, response, body) => {
@@ -32,7 +32,10 @@ module.exports = {
                         const withMeta = Object.assign(
                             {},
                             newData,
-                            {meta: {time: now}});
+                            {meta: {
+                                time: now,
+                                bestBefore
+                            }});
 
                         fs.writeFile(file, JSON.stringify(withMeta),
                             err => {

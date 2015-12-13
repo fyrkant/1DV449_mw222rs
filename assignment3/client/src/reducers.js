@@ -6,8 +6,16 @@ export default (currentState, action) => {
 
     switch(action.type) {
     case C.RECEIVING_DATA:
-    	console.log(action);
+        console.log(action);
         newState.data = action.data;
+        return newState;
+    case C.SELECT_MESSAGE:
+        newState.data.messages.map(message => {
+            if (message.id === action.id) {
+                message.isSelected = true;
+                console.log(message);
+            }
+        });
         return newState;
     default: return currentState || initialState.data;
     }
