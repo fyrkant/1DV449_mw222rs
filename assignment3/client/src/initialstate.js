@@ -1,3 +1,5 @@
 export default {
-    data: []
+    data: [],
+    selected: {id: null},
+    filter: 'ALL'
 };

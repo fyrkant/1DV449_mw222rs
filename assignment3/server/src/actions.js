@@ -24,7 +24,7 @@ module.exports = {
             const now = new Date().getTime();
             const bestBefore = now + 5 * 60 * 1000;
 
-            request('http://api.sr.se/api/v2/traffic/messages?size=100&format=json',
+            request('http://api.sr.se/api/v2/traffic/messages?size=25&format=json',
                 (error, response, body) => {
                     if (!error && response.statusCode == 200) {
                         const newData = JSON.parse(body);
