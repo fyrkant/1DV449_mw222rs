@@ -1,7 +1,5 @@
 const WebSocketServer = require('ws').Server;
 const wss = new WebSocketServer({port: 3000});
-// const api = require('./SRAPI/sr-api');
-// const fs = require('fs');
 const store = require('./src/store');
 const actions = require('./src/actions');
 

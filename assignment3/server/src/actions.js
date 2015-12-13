@@ -23,7 +23,7 @@ module.exports = {
     getNewData() {
         return (dispatch, getState) => {
             const now = new Date().getTime();
-            
+
             request('http://api.sr.se/api/v2/traffic/messages?size=100&format=json',
                 (error, response, body) => {
                     if (!error && response.statusCode == 200) {

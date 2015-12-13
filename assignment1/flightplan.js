@@ -2,7 +2,6 @@ var plan = require('flightplan');
 
 var appName = 'webbskraparn';
 var username = 'deploy';
-var startFile = 'index.js';
 
 var tmpDir = appName + '-' + new Date().getTime();
 
