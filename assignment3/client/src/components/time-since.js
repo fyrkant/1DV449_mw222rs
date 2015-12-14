@@ -9,5 +9,5 @@ export let TimeSinceUpdate = (props) => {
         marginLeft: '5px'
     };
 
-    return <p style={styles}>{timeSinceUpdate}</p>;
+    return <p key={Math.random()} style={styles}>{timeSinceUpdate}</p>;
 };

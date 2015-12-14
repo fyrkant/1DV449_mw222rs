@@ -1,24 +1,22 @@
 import C from './constants';
 import initialState from './initialstate';
+import {filter, sortByOrder} from 'lodash';
 
 export default (currentState, action) => {
     const newState = Object.assign({}, currentState);
 
     switch(action.type) {
     case C.RECEIVING_DATA:
-        console.log(action);
         newState.data = action.data;
+        newState.filteredSortedMessages = sortByOrder(action.data.messages || [], newState.order.key, newState.order.direction);
         return newState;
     case C.SELECT_MESSAGE:
-        console.log(action);
-        console.log(newState);
         newState.data.messages.map(message => {
             if (message.id === newState.selected.id) {
                 newState.selected = {id: null};
             }
             if (message.id === action.id) {
                 newState.selected = message;
-                console.log(message);
             }
         });
         return newState;
@@ -27,8 +25,18 @@ export default (currentState, action) => {
         return newState;
     case C.CHANGE_FILTER:
         newState.filter = action.filter;
-
+        newState.filteredSortedMessages = filter(newState.data.messages || [], (message) => {
+            if (action.filter === 'ALL') {
+                return true;
+            } else {
+                return message.category === action.index;
+            }
+        });
         return newState;
-    default: return currentState || initialState.data;
+    case C.CHANGE_ORDER:
+        newState.order = action.order;
+        newState.filteredSortedMessages = sortByOrder(newState.data.messages || [], newState.order.key, newState.order.direction);
+        return newState;
+    default: return currentState || initialState;
     }
 };

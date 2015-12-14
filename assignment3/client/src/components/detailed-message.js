@@ -1,4 +1,6 @@
 import React from 'react';
+import {Card, CardTitle, CardText} from 'react-mdl';
+import m from 'moment';
 
 export const DetailedMessage = (props) => {
     const priority = {
@@ -10,10 +12,15 @@ export const DetailedMessage = (props) => {
     }[props.message.priority];
 
     return (
-        <div>
-            <p><strong>Prioritet:</strong> {priority}</p>
-            <p><strong>Skapat:</strong> {Date.parse(props.message.createddate)}</p>
-            <p><strong>Exakt plats:</strong> {props.message.exactlocation}</p>
-        </div>
+        <Card shadow={0} style={{width: '250px', margin: '0', padding: '0'}} onClick={props.onClick}>
+            <CardText>
+                <CardTitle>{props.message.title}</CardTitle>
+                <p><strong>Skapat:</strong> {m(props.message.createddate).format('Do MMMM YYYY, LT')}</p>
+                <p><strong>Prioritet:</strong> {priority}</p>
+                {props.message.subcategory ? <p><strong>Underkategori:</strong> {props.message.subcategory}</p> : ''}
+                {props.message.description ? <p><strong>Beskrivning:</strong> {props.message.description}</p> : ''}  
+                {props.message.exactlocation ? <p><strong>Exakt plats:</strong> {props.message.exactlocation}</p> : ''}
+            </CardText>
+        </Card>
     );
 };

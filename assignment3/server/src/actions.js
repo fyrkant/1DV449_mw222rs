@@ -1,9 +1,10 @@
+'use strict';
 const fs = require('fs');
 const request = require('request');
 
 const file = './cache/cache.json';
 
-fs.watch(file, (event, filename) => console.log(event, filename));
+//fs.watch(file, (event, filename) => console.log(event, filename));
 
 module.exports = {
     getData() {
@@ -24,10 +25,16 @@ module.exports = {
             const now = new Date().getTime();
             const bestBefore = now + 5 * 60 * 1000;
 
-            request('http://api.sr.se/api/v2/traffic/messages?size=25&format=json',
+            request('http://api.sr.se/api/v2/traffic/messages?size=100&format=json',
                 (error, response, body) => {
                     if (!error && response.statusCode == 200) {
                         const newData = JSON.parse(body);
+
+                        newData.messages.map((message) => {
+                            message.createddate = new Date(parseInt(message.createddate.substr(6)));
+                            return message;
+                        });
+
 
                         const withMeta = Object.assign(
                             {},
