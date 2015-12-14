@@ -32,10 +32,11 @@ export default (currentState, action) => {
                 return message.category === action.index;
             }
         });
+        newState.filteredSortedMessages = sortByOrder(newState.filteredSortedMessages || [], newState.order.key, newState.order.direction);
         return newState;
     case C.CHANGE_ORDER:
         newState.order = action.order;
-        newState.filteredSortedMessages = sortByOrder(newState.data.messages || [], newState.order.key, newState.order.direction);
+        newState.filteredSortedMessages = sortByOrder(newState.filteredSortedMessages || [], newState.order.key, newState.order.direction);
         return newState;
     default: return currentState || initialState;
     }

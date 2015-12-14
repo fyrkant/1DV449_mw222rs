@@ -20904,10 +20904,11 @@
 	                    return message.category === action.index;
 	                }
 	            });
+	            newState.filteredSortedMessages = (0, _lodash.sortByOrder)(newState.filteredSortedMessages || [], newState.order.key, newState.order.direction);
 	            return newState;
 	        case _constants2.default.CHANGE_ORDER:
 	            newState.order = action.order;
-	            newState.filteredSortedMessages = (0, _lodash.sortByOrder)(newState.data.messages || [], newState.order.key, newState.order.direction);
+	            newState.filteredSortedMessages = (0, _lodash.sortByOrder)(newState.filteredSortedMessages || [], newState.order.key, newState.order.direction);
 	            return newState;
 	        default:
 	            return currentState || _initialstate2.default;
