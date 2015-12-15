@@ -33433,8 +33433,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//export const websocket = new WebSocket('ws:localhost:3000');
-	var websocket = exports.websocket = new WebSocket('ws:188.166.107.162:3000');
+	var websocket = exports.websocket = new WebSocket(document.location.hostname === 'localhost' ? 'ws:localhost:3000' : 'ws:188.166.107.162:3000');
 
 	// 188.166.107.162
 
