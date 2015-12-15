@@ -3,7 +3,7 @@ export default {
     filteredSortedMessages: null,
     selected: {id: null},
     focus: {id: null},
-    ticker: 'Uppdaterades för...',
+    ticker: 'Uppdaterades ...',
     filter: 'ALL',
     order: {
         key: 'createddate',
