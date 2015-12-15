@@ -1,7 +1,7 @@
 import {C, filterIndex} from './constants';
 import m from 'moment';
-export const websocket = new WebSocket('ws:localhost:3000');
-//export const websocket = new WebSocket('ws:188.166.107.162:3000');
+//export const websocket = new WebSocket('ws:localhost:3000');
+export const websocket = new WebSocket('ws:188.166.107.162:3000');
 
 // 188.166.107.162
 
