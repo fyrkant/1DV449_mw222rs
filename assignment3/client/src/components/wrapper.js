@@ -44,24 +44,25 @@ class Wrapper extends React.Component {
 
                 <SimpleMap>
                     {map(this.props.messages || [], (message) => {
-                        return (this.props.selected.id !== message.id ?
-                            <Marker
-                                icon={pinUrl + priorityColors[message.priority]}
-                                key={message.id}
-                                opacity={this.props.selected.id !== null ? .4 : 1}
-                                onMouseover={this.props.focus.bind(this, message.id)}
-                                onClick={this.props.selectMessage.bind(this, message.id)}
-                                position={{lat: message.latitude, lng: message.longitude}}
-                            /> :
-                            <InfoWindow
-                                key={message.id}
-                                position={{lat: message.latitude, lng: message.longitude}}
-                                onCloseclick={this.props.selectMessage.bind(this, message.id)}
-                            >
-                                <DetailedMessage
-                                    message={this.props.selected}
-                                />
-                            </InfoWindow>
+                        return (
+                            this.props.selected.id !== message.id ?
+                                <Marker
+                                    icon={pinUrl + priorityColors[message.priority]}
+                                    key={message.id}
+                                    opacity={this.props.selected.id !== null ? .4 : 1}
+                                    onMouseover={this.props.focus.bind(this, message.id)}
+                                    onClick={this.props.selectMessage.bind(this, message.id)}
+                                    position={{lat: message.latitude, lng: message.longitude}}
+                                /> :
+                                <InfoWindow
+                                    key={message.id}
+                                    position={{lat: message.latitude, lng: message.longitude}}
+                                    onCloseclick={this.props.selectMessage.bind(this, message.id)}
+                                >
+                                    <DetailedMessage
+                                        message={this.props.selected}
+                                    />
+                                </InfoWindow>
                         );
                     })}
                 </SimpleMap>
