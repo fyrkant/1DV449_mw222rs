@@ -1,12 +1,10 @@
 import React from 'react';
 import {IconButton, Menu, MenuItem} from 'react-mdl';
-import {map, isEqual} from 'lodash';
-import {filters, orders, orderMenuString} from '../constants';
+import {map, countBy, isEqual} from 'lodash';
+import {filters, filterIndex, orders, orderMenuString} from '../constants';
 
 export let FilterMenu = (props) => {
-    const filterCounts =  map(props.messages || [], (message) => {
-
-    });
+    const filterCounts = countBy(props.messages, 'category');
 
     return (
         <div>
@@ -16,10 +14,13 @@ export let FilterMenu = (props) => {
             </span>
             <Menu target="filter-menu">
                 {map(filters, (filter, key) => {
+                    const index = filterIndex[key];
+                    const filterMenuString = filter + (index === 9 ? '' : ' (' + filterCounts[index] + ')');
+
                     if (props.filter === key) {
-                        return <MenuItem disabled key={key}>{filter}</MenuItem>;
+                        return <MenuItem disabled key={key}>{filterMenuString}</MenuItem>;
                     } else {
-                        return <MenuItem key={key} onClick={props.filterChangeHandler.bind(this, key)}>{filter}</MenuItem>;
+                        return <MenuItem key={key} onClick={props.filterChangeHandler.bind(this, key)}>{filterMenuString}</MenuItem>;
                     }
                 })}
             </Menu>

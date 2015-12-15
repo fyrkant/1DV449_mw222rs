@@ -14,9 +14,17 @@ export const pinUrl = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&
 export const priorityColors = {
     1: 'E91E63',
     2: 'FF5722',
-    3: 'FFC107',
-    4: '03A9F4',
-    5: '4CAF50'
+    3: 'FC9113',
+    4: '4CAF50',
+    5: 'FFF047'
+};
+
+export const priorityString = {
+    1: 'Mycket allvarlig händelse',
+    2: 'Stor händelse',
+    3: 'Störning',
+    4: 'Information',
+    5: 'Mindre störning'
 };
 
 export const categoryString = {
@@ -33,6 +41,13 @@ export const filters = {
     'COLLECTIVE': 'Kollektivtrafik',
     'PLANNED': 'Planerad störning',
     'OTHER': 'Övrigt'
+};
+export const filterIndex = {
+    'ALL': 9,
+    'ROAD': 0,
+    'COLLECTIVE': 1,
+    'PLANNED': 2,
+    'OTHER': 3
 };
 export const orders = {
     'DATE_DESC': {key: 'createddate', direction: 'desc'},

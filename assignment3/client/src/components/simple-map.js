@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
-import {GoogleMapLoader, GoogleMap} from 'react-google-maps';
+import React from 'react';
+import {GoogleMapLoader, GoogleMap, Marker, InfoWindow} from 'react-google-maps';
+import {map} from 'lodash';
+
+import {DetailedMessage} from './detailed-message';
+import {pinUrl, priorityColors} from '../constants';
 
 let gmaps = window.google.maps;
 
-export class SimpleMap extends Component {
-    handleMarkerClick(message) {
-        this.props.handleMarkerClick(message);
-    }
-    render() {
-        return (
+export const SimpleMap = props => {
+    return (
         <GoogleMapLoader
             containerElement={
-                <div className="mdl-layout__content" {...this.props} style={{height: '100%', height: '100%'}} />
+                <div className="mdl-layout__content" {...props} style={{height: '100%', height: '100%'}} />
             }
             googleMapElement={
                 <GoogleMap
@@ -25,103 +25,27 @@ export class SimpleMap extends Component {
                     defaultZoom={5}
                     defaultCenter={{lat: 63.024489, lng: 15.219418}}
                 >
-                {this.props.children}
+                    {map(props.messages, message =>
+                        <Marker
+                            key={message.id}
+                            icon={pinUrl + priorityColors[message.priority]}
+                            opacity={
+                                props.selected.id === null ? 1 : props.selected.id === message.id ? 1 : .2}
+                            onClick={props.selectMessage.bind(this, message.id)}
+                            position={{lat: message.latitude, lng: message.longitude}}
+                        >
+                            {props.selected.id === message.id ?
+                                <InfoWindow
+                                    onCloseclick={props.selectMessage.bind(this, message.id)}
+                                >
+                                    <DetailedMessage
+                                        message={props.selected}
+                                    />
+                                </InfoWindow> : ''}
+                        </Marker>
+                    )}
                 </GoogleMap>
             }
         />
-      );
-    }
-}
-
-const bwStyles = [
-    {
-        'featureType': 'administrative',
-        'elementType': 'all',
-        'stylers': [
-            {
-                'visibility': 'on'
-            },
-            {
-                'lightness': 33
-            }
-        ]
-    },
-    {
-        'featureType': 'landscape',
-        'elementType': 'all',
-        'stylers': [
-            {
-                'color': '#f2e5d4'
-            }
-        ]
-    },
-    {
-        'featureType': 'poi.park',
-        'elementType': 'geometry',
-        'stylers': [
-            {
-                'color': '#c5dac6'
-            }
-        ]
-    },
-    {
-        'featureType': 'poi.park',
-        'elementType': 'labels',
-        'stylers': [
-            {
-                'visibility': 'on'
-            },
-            {
-                'lightness': 20
-            }
-        ]
-    },
-    {
-        'featureType': 'road',
-        'elementType': 'all',
-        'stylers': [
-            {
-                'lightness': 20
-            }
-        ]
-    },
-    {
-        'featureType': 'road.highway',
-        'elementType': 'geometry',
-        'stylers': [
-            {
-                'color': '#c5c6c6'
-            }
-        ]
-    },
-    {
-        'featureType': 'road.arterial',
-        'elementType': 'geometry',
-        'stylers': [
-            {
-                'color': '#e4d7c6'
-            }
-        ]
-    },
-    {
-        'featureType': 'road.local',
-        'elementType': 'geometry',
-        'stylers': [
-            {
-                'color': '#fbfaf7'
-            }
-        ]
-    },
-    {
-        'featureType': 'water',
-        'elementType': 'all',
-        'stylers': [
-            {
-                'visibility': 'on'
-            },
-            {
-                'color': '#acbcc9'
-            }
-        ]
-    }
-];
+    );
+};

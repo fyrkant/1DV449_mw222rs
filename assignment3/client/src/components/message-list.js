@@ -2,12 +2,11 @@ import React from 'react';
 import {Navigation} from 'react-mdl';
 import {map} from 'lodash';
 import m from 'moment';
-import {priorityColors, categoryString} from '../constants';
 
 export let MessageList = (props) => {
     const nodes = map(props.messages || [], (message) => {
         const baseStyle = {padding: '4px 8px', display: 'block', cursor: 'pointer'};
-        
+
         return (
             <a
                 href="#"
@@ -18,7 +17,7 @@ export let MessageList = (props) => {
                         baseStyle}
                 onClick={props.select.bind(this, message.id)}
             >
-                <p><strong>{m(message.createddate).format('LT')}: {categoryString[message.category]}, {message.subcategory}</strong></p>
+                <p><strong>{m(message.createddate).format('Do MMM, LT')}: {message.subcategory}</strong></p>
                 <p>{message.title}</p>
             </a>
         );

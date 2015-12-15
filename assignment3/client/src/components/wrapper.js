@@ -2,18 +2,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import m from 'moment';
-import {map} from 'lodash';
-import {Layout, Drawer, Card, CardTitle} from 'react-mdl';
-import {Marker, InfoWindow} from 'react-google-maps';
+import {Layout, Drawer} from 'react-mdl';
 
 // components
 import actions from '../actions';
 import {UpdateButton} from './update-button';
 import {MessageList} from './message-list';
-import {DetailedMessage} from './detailed-message';
+import {TimeSince} from './time-since';
 import {SimpleMap} from './simple-map';
 import {FilterMenu} from './filter-menu';
-import {pinUrl, priorityColors} from '../constants';
 
 m.locale('sv');
 
@@ -26,7 +23,7 @@ class Wrapper extends React.Component {
                         messages={this.props.messages}
                         onClick={this.props.update}
                     />
-                    <p style={{display: 'inline', padding: '6px'}}>{this.props.ticker}</p>
+                    <TimeSince tick={this.props.ticker} />
 
                     <FilterMenu
                         messages={this.props.messages}
@@ -41,31 +38,11 @@ class Wrapper extends React.Component {
                         select={this.props.selectMessage}
                     />
                 </Drawer>
-
-                <SimpleMap>
-                    {map(this.props.messages || [], (message) => {
-                        return (
-                            this.props.selected.id !== message.id ?
-                                <Marker
-                                    icon={pinUrl + priorityColors[message.priority]}
-                                    key={message.id}
-                                    opacity={this.props.selected.id !== null ? .4 : 1}
-                                    onMouseover={this.props.focus.bind(this, message.id)}
-                                    onClick={this.props.selectMessage.bind(this, message.id)}
-                                    position={{lat: message.latitude, lng: message.longitude}}
-                                /> :
-                                <InfoWindow
-                                    key={message.id}
-                                    position={{lat: message.latitude, lng: message.longitude}}
-                                    onCloseclick={this.props.selectMessage.bind(this, message.id)}
-                                >
-                                    <DetailedMessage
-                                        message={this.props.selected}
-                                    />
-                                </InfoWindow>
-                        );
-                    })}
-                </SimpleMap>
+                <SimpleMap
+                    messages={this.props.messages}
+                    selected={this.props.selected}
+                    selectMessage={this.props.selectMessage}
+                />
             </Layout>
         );
     }

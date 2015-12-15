@@ -1,4 +1,4 @@
-import {C} from './constants';
+import {C, filterIndex} from './constants';
 import m from 'moment';
 export const websocket = new WebSocket('ws:localhost:3000');
 //export const websocket = new WebSocket('ws:188.166.107.162:3000');
@@ -21,25 +21,18 @@ export default {
         };
     },
     changeFilter(filter) {
-        const filterIndex = {
-            'ALL': 9,
-            'ROAD': 0,
-            'COLLECTIVE': 1,
-            'PLANNED': 2,
-            'OTHER': 3
-        }[filter];
+        const index = filterIndex[filter];
 
-        return {type: C.CHANGE_FILTER, filter: filter, index: filterIndex};
+        return {type: C.CHANGE_FILTER, filter, index};
     },
     changeOrder(order) {
         return {type: C.CHANGE_ORDER, order: order};
     },
     timeSinceUpdateTicker() {
         return (dispatch, getState) => {
+            dispatch({type: C.TICK, tickerString: 'Uppdaterades ' + m(getState().data.meta.time).fromNow()});
             setInterval(() => {
-                const tickerString = 'Uppdaterades ' + m(getState().data.meta.time).fromNow();
-
-                dispatch({type: C.TICK, tickerString});
+                dispatch({type: C.TICK, tickerString: 'Uppdaterades ' + m(getState().data.meta.time).fromNow()});
             }, 10000);
         };
     },
