@@ -4,7 +4,6 @@ const request = require('request');
 const m = require('moment');
 const file = './cache/cache.json';
 
-//fs.watch(file, (event, filename) => console.log(event, filename));
 m.locale('sv');
 
 module.exports = {

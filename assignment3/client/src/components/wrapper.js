@@ -9,12 +9,11 @@ import {Marker, InfoWindow} from 'react-google-maps';
 // components
 import actions from '../actions';
 import {UpdateButton} from './update-button';
-import {TimeSinceUpdate} from './time-since';
 import {MessageList} from './message-list';
 import {DetailedMessage} from './detailed-message';
 import {SimpleMap} from './simple-map';
 import {FilterMenu} from './filter-menu';
-import {priorityColors} from '../constants';
+import {pinUrl, priorityColors} from '../constants';
 
 m.locale('sv');
 
@@ -25,9 +24,9 @@ class Wrapper extends React.Component {
                 <Drawer>
                     <UpdateButton
                         messages={this.props.messages}
-                        onClick={this.props.click}
+                        onClick={this.props.update}
                     />
-                    <p style={{display: 'inline'}}>{this.props.ticker}</p>
+                    <p style={{display: 'inline', padding: '6px'}}>{this.props.ticker}</p>
 
                     <FilterMenu
                         messages={this.props.messages}
@@ -47,7 +46,7 @@ class Wrapper extends React.Component {
                     {map(this.props.messages || [], (message) => {
                         return (this.props.selected.id !== message.id ?
                             <Marker
-                                icon={priorityColors[message.priority]}
+                                icon={pinUrl + priorityColors[message.priority]}
                                 key={message.id}
                                 opacity={this.props.selected.id !== null ? .4 : 1}
                                 onMouseover={this.props.focus.bind(this, message.id)}
@@ -84,8 +83,8 @@ const mapStateToProps = (appState) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        click() {
-            dispatch(actions.sendTestClick());
+        update() {
+            dispatch(actions.updateData());
         },
         selectMessage(id) {
             dispatch(actions.selectMessage(id));

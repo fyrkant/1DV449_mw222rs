@@ -20944,12 +20944,13 @@
 	};
 
 	// pin color urls used by marker component
+	var pinUrl = exports.pinUrl = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
 	var priorityColors = exports.priorityColors = {
-	    1: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|E91E63',
-	    2: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF5722',
-	    3: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFC107',
-	    4: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|03A9F4',
-	    5: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|4CAF50'
+	    1: 'E91E63',
+	    2: 'FF5722',
+	    3: 'FFC107',
+	    4: '03A9F4',
+	    5: '4CAF50'
 	};
 
 	var categoryString = exports.categoryString = {
@@ -33417,13 +33418,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//export const websocket = new WebSocket('ws:localhost:3000');
-	var websocket = exports.websocket = new WebSocket('ws:188.166.107.162:3000');
+	var websocket = exports.websocket = new WebSocket('ws:localhost:3000');
+	//export const websocket = new WebSocket('ws:188.166.107.162:3000');
 
 	// 188.166.107.162
 
 	exports.default = {
-	    sendTestClick: function sendTestClick() {
+	    updateData: function updateData() {
 	        return function () {
 	            websocket.send('UPDATE');
 	        };
@@ -33457,7 +33458,7 @@
 	                var tickerString = 'Uppdaterades ' + (0, _moment2.default)(getState().data.meta.time).fromNow();
 
 	                dispatch({ type: _constants.C.TICK, tickerString: tickerString });
-	            }, 1000);
+	            }, 10000);
 	        };
 	    },
 	    focus: function focus(id) {
@@ -44945,15 +44946,13 @@
 
 	var _updateButton = __webpack_require__(364);
 
-	var _timeSince = __webpack_require__(365);
+	var _messageList = __webpack_require__(365);
 
-	var _messageList = __webpack_require__(366);
+	var _detailedMessage = __webpack_require__(366);
 
-	var _detailedMessage = __webpack_require__(367);
+	var _simpleMap = __webpack_require__(367);
 
-	var _simpleMap = __webpack_require__(368);
-
-	var _filterMenu = __webpack_require__(369);
+	var _filterMenu = __webpack_require__(368);
 
 	var _constants = __webpack_require__(179);
 
@@ -44991,11 +44990,11 @@
 	                    null,
 	                    _react2.default.createElement(_updateButton.UpdateButton, {
 	                        messages: this.props.messages,
-	                        onClick: this.props.click
+	                        onClick: this.props.update
 	                    }),
 	                    _react2.default.createElement(
 	                        'p',
-	                        { style: { display: 'inline' } },
+	                        { style: { display: 'inline', padding: '6px' } },
 	                        this.props.ticker
 	                    ),
 	                    _react2.default.createElement(_filterMenu.FilterMenu, {
@@ -45016,7 +45015,7 @@
 	                    null,
 	                    (0, _lodash.map)(this.props.messages || [], function (message) {
 	                        return _this2.props.selected.id !== message.id ? _react2.default.createElement(_reactGoogleMaps.Marker, {
-	                            icon: _constants.priorityColors[message.priority],
+	                            icon: _constants.pinUrl + _constants.priorityColors[message.priority],
 	                            key: message.id,
 	                            opacity: _this2.props.selected.id !== null ? .4 : 1,
 	                            onMouseover: _this2.props.focus.bind(_this2, message.id),
@@ -45055,8 +45054,8 @@
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
-	        click: function click() {
-	            dispatch(_actions2.default.sendTestClick());
+	        update: function update() {
+	            dispatch(_actions2.default.updateData());
 	        },
 	        selectMessage: function selectMessage(id) {
 	            dispatch(_actions2.default.selectMessage(id));
@@ -52454,41 +52453,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.TimeSinceUpdate = undefined;
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _moment = __webpack_require__(185);
-
-	var _moment2 = _interopRequireDefault(_moment);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var TimeSinceUpdate = exports.TimeSinceUpdate = function TimeSinceUpdate(props) {
-	    var timeSinceUpdate = props.meta ? 'Uppdaterades ' + (0, _moment2.default)(props.meta.time).fromNow() : '';
-	    var styles = {
-	        display: 'inline',
-	        marginLeft: '5px'
-	    };
-
-	    return _react2.default.createElement(
-	        'p',
-	        { style: styles },
-	        timeSinceUpdate
-	    );
-	};
-
-/***/ },
-/* 366 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
 	exports.MessageList = undefined;
 
 	var _react = __webpack_require__(1);
@@ -52509,11 +52473,14 @@
 
 	var MessageList = exports.MessageList = function MessageList(props) {
 	    var nodes = (0, _lodash.map)(props.messages || [], function (message) {
+	        var baseStyle = { padding: '4px 8px', display: 'block', cursor: 'pointer' };
+
 	        return _react2.default.createElement(
 	            'a',
 	            {
+	                href: '#',
 	                key: message.id,
-	                style: props.selected.id === message.id ? { backgroundColor: 'rgb(224,224,224)', fontWeight: 'bold', padding: '4px 8px', display: 'block' } : { padding: '4px 8px', display: 'block' },
+	                style: props.selected.id === message.id ? Object.assign({}, baseStyle, { backgroundColor: 'rgb(224,224,224)', fontWeight: 'bold' }) : baseStyle,
 	                onClick: props.select.bind(undefined, message.id)
 	            },
 	            _react2.default.createElement(
@@ -52545,7 +52512,7 @@
 	};
 
 /***/ },
-/* 367 */
+/* 366 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52647,7 +52614,7 @@
 	};
 
 /***/ },
-/* 368 */
+/* 367 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52718,8 +52685,70 @@
 	    return SimpleMap;
 	})(_react.Component);
 
+	var bwStyles = [{
+	    'featureType': 'administrative',
+	    'elementType': 'all',
+	    'stylers': [{
+	        'visibility': 'on'
+	    }, {
+	        'lightness': 33
+	    }]
+	}, {
+	    'featureType': 'landscape',
+	    'elementType': 'all',
+	    'stylers': [{
+	        'color': '#f2e5d4'
+	    }]
+	}, {
+	    'featureType': 'poi.park',
+	    'elementType': 'geometry',
+	    'stylers': [{
+	        'color': '#c5dac6'
+	    }]
+	}, {
+	    'featureType': 'poi.park',
+	    'elementType': 'labels',
+	    'stylers': [{
+	        'visibility': 'on'
+	    }, {
+	        'lightness': 20
+	    }]
+	}, {
+	    'featureType': 'road',
+	    'elementType': 'all',
+	    'stylers': [{
+	        'lightness': 20
+	    }]
+	}, {
+	    'featureType': 'road.highway',
+	    'elementType': 'geometry',
+	    'stylers': [{
+	        'color': '#c5c6c6'
+	    }]
+	}, {
+	    'featureType': 'road.arterial',
+	    'elementType': 'geometry',
+	    'stylers': [{
+	        'color': '#e4d7c6'
+	    }]
+	}, {
+	    'featureType': 'road.local',
+	    'elementType': 'geometry',
+	    'stylers': [{
+	        'color': '#fbfaf7'
+	    }]
+	}, {
+	    'featureType': 'water',
+	    'elementType': 'all',
+	    'stylers': [{
+	        'visibility': 'on'
+	    }, {
+	        'color': '#acbcc9'
+	    }]
+	}];
+
 /***/ },
-/* 369 */
+/* 368 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

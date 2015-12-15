@@ -10,12 +10,13 @@ export const C = {
 };
 
 // pin color urls used by marker component
+export const pinUrl = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
 export const priorityColors = {
-    1: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|E91E63',
-    2: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF5722',
-    3: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFC107',
-    4: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|03A9F4',
-    5: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|4CAF50'
+    1: 'E91E63',
+    2: 'FF5722',
+    3: 'FFC107',
+    4: '03A9F4',
+    5: '4CAF50'
 };
 
 export const categoryString = {
