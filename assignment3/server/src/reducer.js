@@ -1,9 +1,12 @@
 const initialState = require('./initialstate');
 
 module.exports = (currentState, action) => {
+    const newState = Object.assign({}, currentState);
+
     switch(action.type) {
     case 'UPDATE':
-        return action.data;
+        newState.data = action.data;
+        return newState;
     default: return currentState || initialState;
     }
 };

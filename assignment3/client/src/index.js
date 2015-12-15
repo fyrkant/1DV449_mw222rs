@@ -2,7 +2,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import store from './store';
-import {websocket} from './actions.js';
+import actions, {websocket} from './actions.js';
 import Wrapper from './components/wrapper';
 
 render(
@@ -17,4 +17,5 @@ websocket.onmessage = event => {
     const action = JSON.parse(event.data);
 
     store.dispatch(action);
+    store.dispatch(actions.timeSinceUpdateTicker());
 };

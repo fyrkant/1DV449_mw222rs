@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {GoogleMapLoader, GoogleMap} from 'react-google-maps';
 
+let gmaps = window.google.maps;
+
 export class SimpleMap extends Component {
     handleMarkerClick(message) {
         this.props.handleMarkerClick(message);
@@ -13,6 +15,13 @@ export class SimpleMap extends Component {
             }
             googleMapElement={
                 <GoogleMap
+                    options={{
+                        mapTypeControl: true,
+                        mapTypeControlOptions: {
+                            style: gmaps.MapTypeControlStyle.HORIZONTAL_BAR,
+                            position: gmaps.ControlPosition.TOP_RIGHT
+                        }
+                    }}
                     defaultZoom={5}
                     defaultCenter={{lat: 63.024489, lng: 15.219418}}
                 >

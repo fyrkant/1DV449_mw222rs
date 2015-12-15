@@ -7,7 +7,7 @@ store.subscribe(
     () => {
         if (store.getState()) {
             const action = JSON.stringify(
-                {type: 'RECEIVING_DATA', data: store.getState()}
+                {type: 'RECEIVING_DATA', data: store.getState().data}
             );
 
             wss.broadcast(action);

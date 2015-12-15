@@ -7,9 +7,8 @@ export let UpdateButton = (props) => {
 
     return (
         <Button
-            raised
             colored
-            className="inline"
+            ripple
             onClick={props.onClick}
         >
             {props.messages ? <Icon name={'cached'} /> : <Icon name={'file_download'} />}

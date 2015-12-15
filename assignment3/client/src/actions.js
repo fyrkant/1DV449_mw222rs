@@ -1,17 +1,11 @@
-import C from './constants';
-export const websocket = new WebSocket('ws:188.166.107.162:3000');
+import {C} from './constants';
+import m from 'moment';
+export const websocket = new WebSocket('ws:localhost:3000');
+//export const websocket = new WebSocket('ws:188.166.107.162:3000');
 
 // 188.166.107.162
 
 export default {
-    getState(event) {
-        return (dispatch) => {
-            this.timeSinceUpdateTicker();
-            const action = {type: C.RECEIVING_DATA, data: JSON.parse(event.data)};
-
-            dispatch(action);
-        };
-    },
     sendTestClick() {
         return () => {
             websocket.send('UPDATE');
@@ -42,9 +36,16 @@ export default {
     },
     timeSinceUpdateTicker() {
         return (dispatch, getState) => {
-            if (getState().meta) {
-                setInterval(console.log('hello'), 1000);
-            }
+            setInterval(() => {
+                const tickerString = 'Uppdaterades ' + m(getState().data.meta.time).fromNow();
+
+                dispatch({type: C.TICK, tickerString});
+            }, 1000);
+        };
+    },
+    focus(id) {
+        return (dispatch) => {
+            dispatch({type: C.FOCUS, id: id});
         };
     }
 };

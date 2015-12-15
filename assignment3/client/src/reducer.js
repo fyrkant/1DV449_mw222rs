@@ -1,4 +1,4 @@
-import C from './constants';
+import {C} from './constants';
 import initialState from './initialstate';
 import {filter, sortByOrder} from 'lodash';
 
@@ -37,6 +37,13 @@ export default (currentState, action) => {
     case C.CHANGE_ORDER:
         newState.order = action.order;
         newState.filteredSortedMessages = sortByOrder(newState.filteredSortedMessages || [], newState.order.key, newState.order.direction);
+        return newState;
+    case C.FOCUS:
+        console.log(action.id);
+        newState.focus.id = action.id;
+        return newState;
+    case C.TICK:
+        newState.ticker = action.tickerString;
         return newState;
     default: return currentState || initialState;
     }

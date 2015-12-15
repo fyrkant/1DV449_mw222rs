@@ -1,27 +1,9 @@
 import React from 'react';
-import {Icon, Button, IconButton, Menu, MenuItem} from 'react-mdl';
+import {IconButton, Menu, MenuItem} from 'react-mdl';
 import {map, isEqual} from 'lodash';
+import {filters, orders, orderMenuString} from '../constants';
 
 export let FilterMenu = (props) => {
-    const filters = {
-        'ALL': 'Alla kategorier',
-        'ROAD': 'Vägtrafik',
-        'COLLECTIVE': 'Kollektivtrafik',
-        'PLANNED': 'Planerad störning',
-        'OTHER': 'Övrigt'
-    };
-    const orders = {
-        'DATE_DESC': {key: 'createddate', direction: 'desc'},
-        'DATE_ASC': {key: 'createddate', direction: 'asc'},
-        'TITLE_ASC': {key: 'title', direction: 'asc'},
-        'TITLE_DESC': {key: 'title', direction: 'desc'}
-    };
-    const orderMenuString = {
-        'DATE_DESC': 'Datum nyast först',
-        'DATE_ASC': 'Datum äldst först',
-        'TITLE_ASC': 'Titel A-Ö',
-        'TITLE_DESC': 'Titel Ö-A'
-    };
     const filterCounts =  map(props.messages || [], (message) => {
 
     });
