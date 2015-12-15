@@ -1,6 +1,6 @@
 # Laboration 3, Mashup
 
-[Här kan du applikationen ute i den friska luften](http://mw222rs.github.io/1DV449_mw222rs/assignment3/client/)
+[Här finns applikationen levande och glad](http://mw222rs.github.io/1DV449_mw222rs/assignment3/client/)
 
 ## Reflektionsfrågor, laboration 3
 
