@@ -44993,7 +44993,7 @@
 	                    }),
 	                    _react2.default.createElement(_timeSince.TimeSince, { tick: this.props.ticker }),
 	                    _react2.default.createElement(_filterMenu.FilterMenu, {
-	                        messages: this.props.messages,
+	                        messages: this.props.allMessages,
 	                        filter: this.props.filter,
 	                        filterChangeHandler: this.props.changeFilter,
 	                        order: this.props.order,
@@ -45019,6 +45019,7 @@
 
 	var mapStateToProps = function mapStateToProps(appState) {
 	    return {
+	        allMessages: appState.data.messages,
 	        messages: appState.filteredSortedMessages,
 	        selected: appState.selected,
 	        filter: appState.filter,
@@ -45367,6 +45368,18 @@
 	    value: true
 	});
 
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(276);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 	exports.default = function (displayName, defaultClassName) {
 	    var element = arguments.length <= 2 || arguments[2] === undefined ? 'div' : arguments[2];
 
@@ -45382,21 +45395,12 @@
 	    };
 
 	    fn.displayName = displayName;
+	    fn.propTypes = {
+	        className: _react.PropTypes.string
+	    };
 
 	    return fn;
 	};
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classnames = __webpack_require__(276);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 /***/ },
 /* 276 */
@@ -45745,18 +45749,18 @@
 	    value: true
 	});
 
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	exports.default = function (children, props) {
 	    return _react2.default.Children.map(children, function (child) {
 	        var newProps = typeof props === 'function' ? props(child) : props;
 	        return _react2.default.cloneElement(child, newProps);
 	    });
 	};
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
 /* 284 */
@@ -45813,7 +45817,7 @@
 
 	Section.propTypes = {
 	    className: _react.PropTypes.string,
-	    logo: _react.PropTypes.string,
+	    logo: _react.PropTypes.node,
 	    size: _react.PropTypes.oneOf(['mini', 'mega']),
 	    type: _react.PropTypes.oneOf(['top', 'middle', 'bottom', 'left', 'right'])
 	};
@@ -45880,7 +45884,7 @@
 	DropDownSection.propTypes = {
 	    className: _react.PropTypes.string,
 	    size: _react.PropTypes.oneOf(['mini', 'mega']),
-	    title: _react.PropTypes.string.isRequired
+	    title: _react.PropTypes.node.isRequired
 	};
 	DropDownSection.defaultProps = {
 	    size: 'mega'
@@ -45974,12 +45978,15 @@
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 	var Grid = function Grid(props) {
+	    var noSpacing = props.noSpacing;
 	    var className = props.className;
 	    var children = props.children;
 
-	    var otherProps = _objectWithoutProperties(props, ['className', 'children']);
+	    var otherProps = _objectWithoutProperties(props, ['noSpacing', 'className', 'children']);
 
-	    var classes = (0, _classnames2.default)('mdl-grid', className);
+	    var classes = (0, _classnames2.default)('mdl-grid', {
+	        'mdl-grid--no-spacing': noSpacing
+	    }, className);
 
 	    return _react2.default.createElement(
 	        'div',
@@ -45989,7 +45996,8 @@
 	};
 
 	Grid.propTypes = {
-	    className: _react.PropTypes.string
+	    className: _react.PropTypes.string,
+	    noSpacing: _react.PropTypes.bool
 	};
 
 	/* eslint-disable react/no-multi-comp */
@@ -46287,6 +46295,10 @@
 	    );
 	};
 
+	Content.propTypes = {
+	    className: _react.PropTypes.string
+	};
+
 	exports.default = Content;
 
 /***/ },
@@ -46335,7 +46347,7 @@
 	};
 	Drawer.propTypes = {
 	    className: _react.PropTypes.string,
-	    title: _react.PropTypes.string
+	    title: _react.PropTypes.node
 	};
 
 	exports.default = Drawer;
@@ -46411,7 +46423,7 @@
 	    className: _react.PropTypes.string,
 	    scroll: _react.PropTypes.bool,
 	    seamed: _react.PropTypes.bool,
-	    title: _react.PropTypes.any,
+	    title: _react.PropTypes.node,
 	    transparent: _react.PropTypes.bool,
 	    waterfall: _react.PropTypes.bool
 	};
@@ -46469,7 +46481,7 @@
 	};
 	HeaderRow.propTypes = {
 	    className: _react.PropTypes.string,
-	    title: _react.PropTypes.any
+	    title: _react.PropTypes.node
 	};
 
 	exports.default = HeaderRow;
@@ -47203,6 +47215,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(158);
+
 	var _classnames = __webpack_require__(276);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -47231,6 +47245,18 @@
 	    }
 
 	    _createClass(Checkbox, [{
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate(prevProps) {
+	            if (this.props.disabled !== prevProps.disabled) {
+	                var fnName = this.props.disabled ? 'disable' : 'enable';
+	                (0, _reactDom.findDOMNode)(this).MaterialCheckbox[fnName]();
+	            }
+	            if (this.props.checked !== prevProps.checked) {
+	                var fnName = this.props.checked ? 'check' : 'uncheck';
+	                (0, _reactDom.findDOMNode)(this).MaterialCheckbox[fnName]();
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _props = this.props;
@@ -47563,6 +47589,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(158);
+
 	var _classnames = __webpack_require__(276);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -47595,6 +47623,18 @@
 	    }
 
 	    _createClass(IconToggle, [{
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate(prevProps) {
+	            if (this.props.disabled !== prevProps.disabled) {
+	                var fnName = this.props.disabled ? 'disable' : 'enable';
+	                (0, _reactDom.findDOMNode)(this).MaterialIconToggle[fnName]();
+	            }
+	            if (this.props.checked !== prevProps.checked) {
+	                var fnName = this.props.checked ? 'check' : 'uncheck';
+	                (0, _reactDom.findDOMNode)(this).MaterialIconToggle[fnName]();
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _props = this.props;
@@ -47754,6 +47794,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(158);
+
 	var _classnames = __webpack_require__(276);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -47782,6 +47824,18 @@
 	    }
 
 	    _createClass(Radio, [{
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate(prevProps) {
+	            if (this.props.disabled !== prevProps.disabled) {
+	                var fnName = this.props.disabled ? 'disable' : 'enable';
+	                (0, _reactDom.findDOMNode)(this).MaterialRadio[fnName]();
+	            }
+	            if (this.props.checked !== prevProps.checked) {
+	                var fnName = this.props.checked ? 'check' : 'uncheck';
+	                (0, _reactDom.findDOMNode)(this).MaterialRadio[fnName]();
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _props = this.props;
