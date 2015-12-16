@@ -6,26 +6,28 @@ import {filters, filterIndex, orders, orderMenuString} from '../constants';
 export let FilterMenu = (props) => {
     const filterCounts = countBy(props.messages, 'category');
 
+    filterCounts[9] = props.messages ? props.messages.length : null;
+
     return (
         <div>
             <span id="filter-menu">
                 <IconButton name="more_vert" />
                 {filters[props.filter]}
             </span>
-            <Menu target="filter-menu">
+            <Menu ripple target="filter-menu">
                 {map(filters, (filter, key) => {
-                    const index = filterIndex[key];
-                    const filterMenuString = filter + (index === 9 ? '' : ' (' + filterCounts[index] + ')');
-
-                    if (props.filter === key) {
-                        return <MenuItem disabled key={key}>{filterMenuString}</MenuItem>;
-                    } else if (filterCounts[index]) {
-                        return <MenuItem key={key} onClick={props.filterChangeHandler.bind(this, key)}>{filterMenuString}</MenuItem>;
-                    }
+                    return (props.filter === key ?
+                        <MenuItem key={key} disabled>
+                            {filter} ({filterCounts[filterIndex[key]]})
+                        </MenuItem> : filterCounts[filterIndex[key]] &&
+                        <MenuItem key={key} onClick={props.filterChangeHandler.bind(this, key)}>
+                            {filter} ({filterCounts[filterIndex[key]]})
+                        </MenuItem>
+                    );
                 })}
             </Menu>
             <IconButton name="swap_vert" id="order-menu" style={{float: 'right'}} />
-            <Menu target="order-menu" align="right">
+            <Menu ripple target="order-menu" align="right">
                 {map(orders, (order, key) => {
                     if (isEqual(props.order, order)) {
                         return <MenuItem key={key} disabled>{orderMenuString[key]}</MenuItem>;

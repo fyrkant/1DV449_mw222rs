@@ -27,7 +27,7 @@ export default (currentState, action) => {
         newState.filter = action.filter;
         newState.filteredSortedMessages = filter(newState.data.messages || [], (message) => {
             if (action.filter === 'ALL') {
-                return true;
+                return message;
             } else {
                 return message.category === action.index;
             }
