@@ -26,7 +26,7 @@ class Wrapper extends React.Component {
                     <TimeSince tick={this.props.ticker} />
 
                     <FilterMenu
-                        messages={this.props.messages}
+                        messages={this.props.allMessages}
                         filter={this.props.filter}
                         filterChangeHandler={this.props.changeFilter}
                         order={this.props.order}
@@ -50,6 +50,7 @@ class Wrapper extends React.Component {
 
 const mapStateToProps = (appState) => {
     return {
+        allMessages: appState.data.messages,
         messages: appState.filteredSortedMessages,
         selected: appState.selected,
         filter: appState.filter,
