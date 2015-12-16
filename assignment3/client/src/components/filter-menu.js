@@ -19,7 +19,7 @@ export let FilterMenu = (props) => {
 
                     if (props.filter === key) {
                         return <MenuItem disabled key={key}>{filterMenuString}</MenuItem>;
-                    } else {
+                    } else if (filterCounts[index]) {
                         return <MenuItem key={key} onClick={props.filterChangeHandler.bind(this, key)}>{filterMenuString}</MenuItem>;
                     }
                 })}
