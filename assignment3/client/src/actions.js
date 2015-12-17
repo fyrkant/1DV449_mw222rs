@@ -1,4 +1,4 @@
-import {C, filterIndex} from './constants';
+import {C} from './constants';
 import m from 'moment';
 export const websocket = new WebSocket(
     document.location.hostname === 'localhost' ?
@@ -23,9 +23,7 @@ export default {
         };
     },
     changeFilter(filter) {
-        const index = filterIndex[filter];
-
-        return {type: C.CHANGE_FILTER, filter, index};
+        return {type: C.CHANGE_FILTER, filter};
     },
     changeOrder(order) {
         return {type: C.CHANGE_ORDER, order: order};

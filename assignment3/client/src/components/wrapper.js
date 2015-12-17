@@ -1,11 +1,13 @@
 // third party
 import React from 'react';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 import m from 'moment';
 import {Layout, Drawer} from 'react-mdl';
 
 // components
 import actions from '../actions';
+import {filterIndex} from '../constants';
 import {UpdateButton} from './update-button';
 import {MessageList} from './message-list';
 import {TimeSince} from './time-since';
@@ -16,11 +18,16 @@ m.locale('sv');
 
 class Wrapper extends React.Component {
     render() {
+        const filteredAndSorted = _(this.props.allMessages)
+            .filter(m => this.props.filter === 'ALL' ? m : m.category === filterIndex[this.props.filter])
+            .sortByOrder(this.props.order.key, this.props.order.direction)
+            .value();
+
         return (
             <Layout fixedDrawer>
                 <Drawer>
                     <UpdateButton
-                        messages={this.props.messages}
+                        messages={filteredAndSorted}
                         onClick={this.props.update}
                     />
                     <TimeSince tick={this.props.ticker} />
@@ -34,12 +41,12 @@ class Wrapper extends React.Component {
                     />
                     <MessageList
                         selected={this.props.selected}
-                        messages={this.props.messages}
+                        messages={filteredAndSorted}
                         select={this.props.selectMessage}
                     />
                 </Drawer>
                 <SimpleMap
-                    messages={this.props.messages}
+                    messages={filteredAndSorted}
                     selected={this.props.selected}
                     selectMessage={this.props.selectMessage}
                 />
@@ -51,7 +58,6 @@ class Wrapper extends React.Component {
 const mapStateToProps = (appState) => {
     return {
         allMessages: appState.data.messages,
-        messages: appState.filteredSortedMessages,
         selected: appState.selected,
         filter: appState.filter,
         order: appState.order,

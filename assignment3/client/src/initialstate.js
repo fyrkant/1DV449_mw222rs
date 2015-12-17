@@ -1,6 +1,5 @@
 export default {
     data: [],
-    filteredSortedMessages: null,
     selected: {id: null},
     focus: {id: null},
     ticker: 'Uppdaterades ...',

@@ -18,6 +18,7 @@
             2,
             "always"
         ],
+        "dot-location": [2, "property"],
         "max-len": 0,
         "no-extra-parens": 0,
         "comma-dangle": 1,

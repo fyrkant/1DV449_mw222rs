@@ -1,6 +1,47 @@
 import {C} from './constants';
 import initialState from './initialstate';
-import {filter, sortByOrder} from 'lodash';
+
+const data = (currentState, action) => {
+    switch(action.type) {
+    case C.RECEIVING_DATA:
+        return action.data;
+    default: return currentState || initialState.rawMessages;
+    }
+};
+
+const selected = (currentState, action) => {
+    switch(action.type) {
+    case C.RECEIVING_DATA:
+        return action.data;
+    default: return currentState || initialState.rawMessages;
+    }
+};
+
+const ticker = (currentState, action) => {
+    switch(action.type) {
+    case C.RECEIVING_DATA:
+        return action.data;
+    default: return currentState || initialState.rawMessages;
+    }
+};
+
+const filter = (currentState, action) => {
+    switch(action.type) {
+    case C.RECEIVING_DATA:
+        return action.data;
+    default: return currentState || initialState.rawMessages;
+    }
+};
+
+const order = (currentState, action) => {
+    switch(action.type) {
+    case C.RECEIVING_DATA:
+        return action.data;
+    default: return currentState || initialState.rawMessages;
+    }
+};
+
+
 
 export default (currentState, action) => {
     const newState = Object.assign({}, currentState);
@@ -8,7 +49,6 @@ export default (currentState, action) => {
     switch(action.type) {
     case C.RECEIVING_DATA:
         newState.data = action.data;
-        newState.filteredSortedMessages = sortByOrder(action.data.messages || [], newState.order.key, newState.order.direction);
         return newState;
     case C.SELECT_MESSAGE:
         newState.data.messages.map(message => {
@@ -25,18 +65,9 @@ export default (currentState, action) => {
         return newState;
     case C.CHANGE_FILTER:
         newState.filter = action.filter;
-        newState.filteredSortedMessages = filter(newState.data.messages || [], (message) => {
-            if (action.filter === 'ALL') {
-                return message;
-            } else {
-                return message.category === action.index;
-            }
-        });
-        newState.filteredSortedMessages = sortByOrder(newState.filteredSortedMessages || [], newState.order.key, newState.order.direction);
         return newState;
     case C.CHANGE_ORDER:
         newState.order = action.order;
-        newState.filteredSortedMessages = sortByOrder(newState.filteredSortedMessages || [], newState.order.key, newState.order.direction);
         return newState;
     case C.FOCUS:
         console.log(action.id);
