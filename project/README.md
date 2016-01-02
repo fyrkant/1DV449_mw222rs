@@ -1,3 +1,7 @@
+# [Länk till repositoriet med kod!][1]
+
+# [Länk till rapporten!][2]
+
 # Projektbeskrivning
 
 Jag har tänkt göra en applikation till min pappa där han skall kunna kartlägga alla de tvättstugor som han har installerat tvättmaskiner och torktumlare i. 
@@ -9,3 +13,6 @@ Några snabba krav:
 * Applikationen skall fungera bra på en android smartphone. 
 
 De tekniker jag har tänkt använda är Node som backend, JavaScript med React och redux som frontend och möjligen MongoDB/CouchDB som databas. PouchDB verkar även det väldigt intressant som lösning för offline, men jag vet inte om det är något jag kommer att ha tid med. 
+
+[1]: https://github.com/mw222rs/LaundroMap
+[2]: https://github.com/mw222rs/LaundroMap/blob/master/report.md
